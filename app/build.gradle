@@ -7,6 +7,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "io.github.kabirnayeem99.alarmforsalat"
         minSdkVersion 23
@@ -45,4 +49,7 @@ dependencies {
 
     // BubbleTabBar (https://github.com/akshay2211/BubbleTabBar)
     implementation 'com.fxn769:bubbletabbar:1.0.6'
+
+    // Toggle (https://github.com/Angads25/android-toggle)
+    implementation 'com.github.angads25:toggle:1.1.0'
 }
