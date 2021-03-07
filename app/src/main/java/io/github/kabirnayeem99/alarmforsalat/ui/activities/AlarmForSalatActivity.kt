@@ -2,8 +2,6 @@ package io.github.kabirnayeem99.alarmforsalat.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.ScriptGroup
-import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 
 class AlarmForSalatActivity : AppCompatActivity() {
