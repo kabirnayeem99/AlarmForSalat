@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuSalatTime"
+        android:id="@+id/menuAlarm"
         android:icon="@drawable/ic_alarm_clock"
-        android:title="Salat Time" />
+        android:title="Alarm" />
 
 
     <item
-        android:id="@+id/menuCurrentDate"
-        android:icon="@drawable/ic_alarm_clock"
-        android:title="Current Date" />
+        android:id="@+id/menuDate"
+        android:icon="@drawable/ic_date"
+        android:title="Date" />
 
     <item
         android:id="@+id/menuLocation"
-        android:icon="@drawable/ic_alarm_clock"
+        android:icon="@drawable/ic_location"
         android:title="Location" />
+
+
+    <item
+        android:id="@+id/menuSettings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
 
 </menu>
