@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuSalatTime"
+        android:icon="@drawable/ic_alarm_clock"
+        android:title="Salat Time" />
+
+
+    <item
+        android:id="@+id/menuCurrentDate"
+        android:icon="@drawable/ic_alarm_clock"
+        android:title="Current Date" />
+
+    <item
+        android:id="@+id/menuLocation"
+        android:icon="@drawable/ic_alarm_clock"
+        android:title="Location" />
+
+</menu>
