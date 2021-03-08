@@ -9,8 +9,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:layout_margin="0dp">
+        android:layout_margin="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -39,30 +39,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-    <!--    <com.fxn.BubbleTabBar-->
-    <!--        android:id="@+id/btTopTabBar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:elevation="0dp"-->
-    <!--        android:padding="7dp"-->
-    <!--        app:bubbletab_disabled_icon_color="?attr/colorPrimary"-->
-    <!--        app:bubbletab_horizontal_padding="20dp"-->
-    <!--        app:bubbletab_icon_padding="5sp"-->
-    <!--        app:bubbletab_icon_size="20dp"-->
-    <!--        app:bubbletab_menuResource="@menu/bottom_nav_menu_list"-->
-    <!--        app:bubbletab_title_size="16sp"-->
-    <!--        app:bubbletab_vertical_padding="10dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/flFragmentHolder"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/btTopTabBar" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
