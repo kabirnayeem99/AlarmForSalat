@@ -19,28 +19,37 @@ import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
-import io.github.kabirnayeem99.alarmforsalat.ui.fragments.LocationFragment
+import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import org.osmdroid.config.Configuration
 
 const val ACCESS_CODE_LOCATION = 1
+const val ACCESS_CODE_STORAGE = 2
 
 class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentAlarm: AlarmFragment
-    lateinit var fragmentLocation: LocationFragment
+    lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
+    private var location: Location = Location("")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAlarmForSalatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy);
-        val context = applicationContext
-        Configuration.getInstance()
-            .load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        fixOpenStreetMapBug()
         initFragments()
         initTabLayout()
         requestLocationPermission()
+    }
+
+    private fun fixOpenStreetMapBug() {
+        // fixed following this
+        // https://github.com/osmdroid/osmdroid/issues/1313
+        val policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        val context = applicationContext
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
     }
 
     private fun requestLocationPermission() {
@@ -52,6 +61,19 @@ class AlarmForSalatActivity : AppCompatActivity() {
             requestPermissions(
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 ACCESS_CODE_LOCATION
+            )
+        }
+    }
+
+    private fun requestStorageLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                ACCESS_CODE_STORAGE
             )
         }
     }
@@ -69,6 +91,19 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 }
                 else -> {
                     Toast.makeText(this, "You granted this permission", Toast.LENGTH_SHORT)
+                        .show()
+
+                    getUserLocation()
+                }
+            }
+
+            ACCESS_CODE_STORAGE -> when {
+                grantResults[0] != PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(this, "You didn't grant location permission", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else -> {
+                    Toast.makeText(this, "You granted location permission", Toast.LENGTH_SHORT)
                         .show()
 
                     getUserLocation()
@@ -96,10 +131,13 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 3f,
                 userLocationListener
             )
+            val l = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            Toast.makeText(this, l?.latitude.toString(), Toast.LENGTH_SHORT).show()
             return
         }
 
-        val userLocation = LatLng(location.latitude, location.longitude)
+        var userLocation = LatLng(location.latitude, location.longitude)
+        Toast.makeText(this, "Your location is at $location", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -117,10 +155,9 @@ class AlarmForSalatActivity : AppCompatActivity() {
 
     private fun initFragments() {
         fragmentAlarm = AlarmFragment()
-        fragmentLocation = LocationFragment()
+        fragmentLocation = MapsFragment()
     }
 
-    private var location: Location = Location("")
 
     inner class UserLocationListener : LocationListener {
 

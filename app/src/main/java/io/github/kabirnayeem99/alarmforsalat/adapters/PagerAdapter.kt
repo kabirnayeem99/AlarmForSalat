@@ -1,16 +1,12 @@
 package io.github.kabirnayeem99.alarmforsalat.adapters
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ImageSpan
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
-import io.github.kabirnayeem99.alarmforsalat.ui.fragments.LocationFragment
+import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 
 
 class PagerAdapter(fm: FragmentManager, var context: Context) :
@@ -24,7 +20,7 @@ class PagerAdapter(fm: FragmentManager, var context: Context) :
         var fragment: Fragment = AlarmFragment()
         when (position) {
             0 -> fragment = AlarmFragment()
-            1 -> fragment = LocationFragment()
+            1 -> fragment = MapsFragment()
         }
         return fragment
     }

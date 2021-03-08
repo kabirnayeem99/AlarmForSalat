@@ -40,14 +40,8 @@ class SalatTimingsRecyclerViewAdapter() :
             with(differ.currentList[position]) {
                 binding.tvSalatName.text = name
                 binding.tvSalatTime.text = time
-                binding.lsAlarmToggle.apply {
-//                    colorOn = Color.argb(1, 187, 134, 252)
-//                    colorOff = Color.DKGRAY
-//                    labelOn = ""
-//                    labelOff = ""
-//                    colorBorder = Color.argb(1, 55, 0, 179)
-                    isChecked = toggle
-                }
+                binding.lsAlarmToggle.isChecked = toggle
+
             }
         }
 
