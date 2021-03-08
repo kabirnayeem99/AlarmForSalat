@@ -24,8 +24,12 @@
                 android:id="@+id/tvSalatTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time"
+                android:text="5:40"
                 android:textSize="28sp" />
+
+            <Space
+                android:layout_width="5sp"
+                android:layout_height="5sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,18 +43,22 @@
             android:id="@+id/tvSalatName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Salat name"
+            android:text="Dhuar"
             android:textSize="18sp" />
     </LinearLayout>
 
-    <com.github.angads25.toggle.widget.LabeledSwitch
+    <com.suke.widget.SwitchButton
         android:id="@+id/lsAlarmToggle"
-        android:layout_width="40dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:elevation="0dp"
         android:textAlignment="center"
-        app:colorBorder="?attr/colorSecondary" />
+        app:sb_background="@color/material_on_background_disabled"
+        app:sb_button_color="@color/white"
+        app:sb_checked_color="?attr/colorPrimary"
+        app:sb_checkline_color="?attr/colorPrimary"
+        app:sb_shadow_effect="false" />
 
 </RelativeLayout>
