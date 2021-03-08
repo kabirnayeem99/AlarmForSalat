@@ -3,35 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16sp"
     android:orientation="horizontal"
     android:padding="12sp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvSalatTime"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Time"
-            android:textSize="22sp" />
+            android:orientation="horizontal"
+            android:textAlignment="viewStart">
+
+            <TextView
+                android:id="@+id/tvSalatTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textSize="28sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM"
+                android:textSize="16sp" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tvSalatName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Salat name"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <com.github.angads25.toggle.widget.LabeledSwitch
         android:id="@+id/lsAlarmToggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:elevation="0dp"
+        android:textAlignment="center"
         app:colorBorder="?attr/colorSecondary" />
 
 </RelativeLayout>
