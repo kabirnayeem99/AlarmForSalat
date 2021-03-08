@@ -14,29 +14,34 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import io.github.kabirnayeem99.alarmforsalat.R
+import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
+import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
 
 class MapsFragment : Fragment() {
 
+    /*
+    follows https://developer.android.com/topic/libraries/view-binding
+    for view binding
+   */
+    private var _binding: FragmentMapsBinding? = null
+
+    private val binding get() = _binding!!
+
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val ctg = LatLng(22.341685874789473, 91.7815618476437)
+        googleMap.addMarker(MarkerOptions().position(ctg).title("Marker in ctg"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ctg, 14f))
+    }
+
+    companion object {
+        val instance: MapsFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { MapsFragment() }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 

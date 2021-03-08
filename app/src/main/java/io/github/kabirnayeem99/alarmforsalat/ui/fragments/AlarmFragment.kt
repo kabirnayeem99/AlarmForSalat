@@ -12,7 +12,7 @@ import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 
 
-class AlarmFragment() : Fragment(R.layout.fragment_alarm) {
+class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     /*
     follows https://developer.android.com/topic/libraries/view-binding

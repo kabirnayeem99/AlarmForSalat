@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:soundEffectsEnabled="false"
     tools:context=".ui.activities.AlarmForSalatActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,15 +19,18 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?android:colorBackground"
             android:elevation="0dp"
+            android:soundEffectsEnabled="false"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:soundEffectsEnabled="false"
                 app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
+                app:tabRippleColor="?android:colorBackground"
                 app:tabTextColor="?attr/colorPrimary" />
         </androidx.appcompat.widget.Toolbar>
 
