@@ -1,15 +1,26 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.activities
 
+import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.location.LocationProvider
+import android.media.VolumeShaper
 import android.os.Bundle
+import android.os.StrictMode
+import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.maps.model.LatLng
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.LocationFragment
+import org.osmdroid.config.Configuration
 
 const val ACCESS_CODE_LOCATION = 1
 
@@ -22,6 +33,11 @@ class AlarmForSalatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlarmForSalatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val policy: StrictMode.ThreadPolicy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy);
+        val context = applicationContext
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context));
         initFragments()
         initTabLayout()
         requestLocationPermission()
@@ -54,10 +70,37 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 else -> {
                     Toast.makeText(this, "You granted this permission", Toast.LENGTH_SHORT)
                         .show()
+
+                    getUserLocation()
                 }
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun getUserLocation() {
+        val userLocationListener = UserLocationListener()
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                3000,
+                3f,
+                userLocationListener
+            )
+            return
+        }
+
+        val userLocation = LatLng(location.latitude, location.longitude)
+
     }
 
     private fun initTabLayout() {
@@ -76,5 +119,20 @@ class AlarmForSalatActivity : AppCompatActivity() {
         fragmentAlarm = AlarmFragment()
         fragmentLocation = LocationFragment()
     }
+
+    private var location: Location = Location("")
+
+    inner class UserLocationListener : LocationListener {
+
+        init {
+            location.longitude = 0.0
+            location.latitude = 0.0
+        }
+
+        override fun onLocationChanged(l: Location) {
+            location = l
+        }
+    }
+
 
 }

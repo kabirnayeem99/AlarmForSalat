@@ -56,4 +56,7 @@ dependencies {
 
     // NavigationTabBar (https://github.com/Devlight/NavigationTabBar)
     implementation  'devlight.io:navigationtabbar:1.2.5'
+
+    // OSMDroid
+    implementation 'org.osmdroid:osmdroid-android:6.1.1'
 }
