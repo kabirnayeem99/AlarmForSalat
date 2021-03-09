@@ -7,8 +7,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.StrictMode
-import android.preference.PreferenceManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,7 +19,6 @@ import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
-import org.osmdroid.config.Configuration
 
 const val ACCESS_CODE_LOCATION = 1
 const val ACCESS_CODE_STORAGE = 2
@@ -34,6 +34,7 @@ class AlarmForSalatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlarmForSalatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar);
         initFragments()
         initTabLayout()
         requestLocationPermission()
@@ -50,6 +51,8 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 ACCESS_CODE_LOCATION
             )
+
+            getUserLocation()
         }
     }
 
@@ -131,6 +134,26 @@ class AlarmForSalatActivity : AppCompatActivity() {
 
         override fun onLocationChanged(l: Location) {
             location = l
+        }
+    }
+
+
+    /*
+    Options menu settings
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuSettingsMain -> {
+                Toast.makeText(this, "You selected settings", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
