@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AlarmForSalat</string>
+    <string name="sample_readable_date">07 Mar 2021</string>
+    <string name="sample_hijri_day">23</string>
+    <string name="sample_hijri_week_day">Al Ahad</string>
+    <string name="sample_hijri_ar_week_day">الاحد</string>
+    <string name="sample_hijri_month">Rajab</string>
+    <string name="sample_hijri_year">1442</string>
+    <string name="sample_hijri_month_ar">رَجَب</string>
+    <string name="sample_hijri_full_date">23-07-1442</string>
 </resources>
