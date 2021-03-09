@@ -32,6 +32,7 @@
                 app:tabMode="scrollable"
                 app:tabRippleColor="?android:colorBackground"
                 app:tabTextColor="?attr/colorPrimary" />
+
         </androidx.appcompat.widget.Toolbar>
 
 
