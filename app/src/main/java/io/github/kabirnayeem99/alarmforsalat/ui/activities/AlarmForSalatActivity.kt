@@ -1,11 +1,9 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.activities
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -26,7 +24,7 @@ import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 const val ACCESS_CODE_LOCATION = 1
 const val ACCESS_CODE_STORAGE = 2
 
-class AlarmForSalatActivity : AppCompatActivity(), LocationListener {
+class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentAlarm: AlarmFragment
     lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
@@ -42,7 +40,6 @@ class AlarmForSalatActivity : AppCompatActivity(), LocationListener {
         initTabLayout()
         requestLocationPermission()
         getUserLocation()
-
     }
 
 
@@ -126,7 +123,8 @@ class AlarmForSalatActivity : AppCompatActivity(), LocationListener {
 
             // adds icon to the tab title position
             tabs.getTabAt(0)?.setIcon(R.drawable.ic_alarm_clock)
-            tabs.getTabAt(1)?.setIcon(R.drawable.ic_location)
+            tabs.getTabAt(1)?.setIcon(R.drawable.ic_date)
+            tabs.getTabAt(2)?.setIcon(R.drawable.ic_location)
         }
 
     }
@@ -156,10 +154,6 @@ class AlarmForSalatActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    override fun onLocationChanged(location: Location) {
-        Log.d(TAG, "onLocationChanged: location has changed")
-        this.location = location
-    }
 
     companion object {
         private const val TAG = "AlarmForSalatActivity"
