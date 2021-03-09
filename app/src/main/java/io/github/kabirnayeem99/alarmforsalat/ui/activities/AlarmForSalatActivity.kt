@@ -7,23 +7,26 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.maps.model.LatLng
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
+import io.github.kabirnayeem99.alarmforsalat.data.LocationService
+import io.github.kabirnayeem99.alarmforsalat.data.LocationService.LocationResult
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 
+
 const val ACCESS_CODE_LOCATION = 1
 const val ACCESS_CODE_STORAGE = 2
 
-class AlarmForSalatActivity : AppCompatActivity() {
+class AlarmForSalatActivity : AppCompatActivity(), LocationListener {
     private lateinit var fragmentAlarm: AlarmFragment
     lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
@@ -38,21 +41,27 @@ class AlarmForSalatActivity : AppCompatActivity() {
         initFragments()
         initTabLayout()
         requestLocationPermission()
+        getUserLocation()
+
     }
 
 
     private fun requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
                 ACCESS_CODE_LOCATION
             )
-
-            getUserLocation()
         }
     }
 
@@ -68,8 +77,13 @@ class AlarmForSalatActivity : AppCompatActivity() {
                     Toast.makeText(this, "You didn't grant this permission", Toast.LENGTH_SHORT)
                         .show()
                 }
+                grantResults[1] != PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(this, "You didn't grant this permission", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
                 else -> {
-                    Toast.makeText(this, "You granted this permission", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "You granted all permissions", Toast.LENGTH_SHORT)
                         .show()
 
                     getUserLocation()
@@ -80,31 +94,27 @@ class AlarmForSalatActivity : AppCompatActivity() {
     }
 
     private fun getUserLocation() {
-        val userLocationListener = UserLocationListener()
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                3000,
-                3f,
-                userLocationListener
-            )
-            val l = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            Toast.makeText(this, l?.latitude.toString(), Toast.LENGTH_SHORT).show()
-            return
+            val locationResult: LocationResult = object : LocationResult() {
+                override fun gotLocation(location: Location?) {
+                    Log.d(
+                        TAG,
+                        "onCreate: lat -> ${location?.latitude}, long -> ${location?.longitude}"
+                    )
+
+                }
+            }
+            val locationService = LocationService()
+            locationService.getLocation(this, locationResult)
         }
-
-        var userLocation = LatLng(location.latitude, location.longitude)
-        Toast.makeText(this, "Your location is at $location", Toast.LENGTH_SHORT).show()
-
     }
 
     private fun initTabLayout() {
@@ -113,6 +123,8 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 adapter = PagerAdapter(supportFragmentManager, this@AlarmForSalatActivity)
             }
             tabs.setupWithViewPager(binding.pager)
+
+            // adds icon to the tab title position
             tabs.getTabAt(0)?.setIcon(R.drawable.ic_alarm_clock)
             tabs.getTabAt(1)?.setIcon(R.drawable.ic_location)
         }
@@ -122,19 +134,6 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private fun initFragments() {
         fragmentAlarm = AlarmFragment()
         fragmentLocation = MapsFragment()
-    }
-
-
-    inner class UserLocationListener : LocationListener {
-
-        init {
-            location.longitude = 0.0
-            location.latitude = 0.0
-        }
-
-        override fun onLocationChanged(l: Location) {
-            location = l
-        }
     }
 
 
@@ -157,5 +156,13 @@ class AlarmForSalatActivity : AppCompatActivity() {
         }
     }
 
+    override fun onLocationChanged(location: Location) {
+        Log.d(TAG, "onLocationChanged: location has changed")
+        this.location = location
+    }
+
+    companion object {
+        private const val TAG = "AlarmForSalatActivity"
+    }
 
 }
