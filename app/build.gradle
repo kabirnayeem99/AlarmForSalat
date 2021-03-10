@@ -48,18 +48,33 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // BubbleTabBar (https://github.com/akshay2211/BubbleTabBar)
-    implementation 'com.fxn769:bubbletabbar:1.0.6'
-
     // SwitchButton (https://github.com/zcweng/SwitchButton)
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 
-    // NavigationTabBar (https://github.com/Devlight/NavigationTabBar)
-    implementation  'devlight.io:navigationtabbar:1.2.5'
 
-    // OSMDroid
-    implementation 'org.osmdroid:osmdroid-android:6.1.1'
+    // Lifecycle
+    def lifecycle_version = "2.2.0"
+    def arch_version = "2.1.0"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // Annotation Processor
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    // JSON Converter
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 
+    // Room
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }
