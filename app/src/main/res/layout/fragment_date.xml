@@ -52,7 +52,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:text="@string/sample_hijri_ar_week_day" />
+                android:text="@string/sample_hijri_ar_week_day"
+                android:textAlignment="center"
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
