@@ -1,10 +1,10 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,18 +31,17 @@ class MapsFragment : Fragment() {
    */
     private var _binding: FragmentMapsBinding? = null
     val placeAdapter = PlaceAdapter()
+    lateinit var cities: List<City>
 
 
     private val binding get() = _binding!!
     lateinit var placesResponse: PlacesResponse
 
     private val callback = OnMapReadyCallback { googleMap ->
-        val cities = retrieveCities()
         val city = cities[0]
         val ctg = LatLng(city.lat, city.lng)
-        Log.d(TAG, "callback: ${city.city}")
         googleMap.addMarker(
-            MarkerOptions().position(ctg).title("Marker in ${placesResponse[0].city}")
+            MarkerOptions().position(ctg).title("Marker in ${cities[0].city}")
         )
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ctg, 14f))
     }
@@ -78,43 +77,42 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-        setHasOptionsMenu(true)
+        cities = retrieveCities()
+//        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+//        mapFragment?.getMapAsync(callback)
+
+//        mapFragment?.setMenuVisibility(false)
+
         initRecyclerView()
+        setUpSearchListener()
+
 
     }
 
+    private fun setUpSearchListener() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (count > 0) {
+                    placeAdapter.filter.filter(s)
+                } else {
+                    placeAdapter.differ.submitList(cities)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
     private fun initRecyclerView() {
+
         binding.rvPlaces.apply {
             adapter = placeAdapter
             layoutManager = LinearLayoutManager(context)
         }
 
-        placeAdapter.differ.submitList(retrieveCities())
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
-        inflater.inflate(R.menu.maps_menu, menu)
-
-        val searchItem: MenuItem = menu.findItem(R.id.menuSearch)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.imeOptions = EditorInfo.IME_ACTION_DONE
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                placeAdapter.filter.filter(newText)
-                return false
-            }
-
-        })
+        placeAdapter.differ.submitList(cities)
 
     }
 

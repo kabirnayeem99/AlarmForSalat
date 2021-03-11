@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('customedittext-1.0.4.aar'))

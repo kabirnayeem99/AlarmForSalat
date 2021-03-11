@@ -51,6 +51,9 @@ dependencies {
     // SwitchButton (https://github.com/zcweng/SwitchButton)
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 
+    // CustomEditText (https://github.com/Rajagopalr3/CustomEditText)
+    implementation 'com.libizo:customedittext:1.0.6'
+
 
     // Lifecycle
     def lifecycle_version = "2.3.0"

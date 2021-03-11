@@ -15,4 +15,5 @@
         <item name="android:navigationBarColor">?android:colorBackground</item>
         <item name="backgroundColor">@color/black</item>
     </style>
+
 </resources>
