@@ -8,4 +8,6 @@
     <string name="sample_hijri_year">1442</string>
     <string name="sample_hijri_month_ar">رَجَب</string>
     <string name="sample_hijri_full_date">23-07-1442</string>
+    <string name="sample_city_name">Ōsaka</string>
+    <string name="sample_countr_name">Japan</string>
 </resources>

@@ -34,7 +34,6 @@ class SalatTimingsRecyclerViewAdapter() :
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val salatTiming: SalatTiming = differ.currentList[position]
 
         with(holder) {
             with(differ.currentList[position]) {
