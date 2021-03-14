@@ -1,7 +1,6 @@
-package io.github.kabirnayeem99.alarmforsalat.Utils
+package io.github.kabirnayeem99.alarmforsalat.utils
 
 import android.util.Log
-import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import java.io.InputStream
 import java.nio.charset.Charset
 

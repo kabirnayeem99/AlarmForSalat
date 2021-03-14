@@ -20,7 +20,7 @@ class PagerAdapter(fm: FragmentManager, var context: Context) :
         when (position) {
             0 -> fragment = AlarmFragment.instance
             1 -> fragment = DateFragment.instance
-            2 -> fragment = MapsFragment.instance
+            2 -> fragment = MapsFragment()
         }
         return fragment
     }

@@ -1,34 +1,29 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
-import io.github.kabirnayeem99.alarmforsalat.R
-import io.github.kabirnayeem99.alarmforsalat.Utils.Constants
-import io.github.kabirnayeem99.alarmforsalat.Utils.Utilities
+import io.github.kabirnayeem99.alarmforsalat.utils.Constants
+import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 import io.github.kabirnayeem99.alarmforsalat.adapters.PlaceAdapter
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
 import java.io.InputStream
 
 
-class MapsFragment : Fragment() {
+class MapsFragment() : Fragment() {
 
     /*
     follows https://developer.android.com/topic/libraries/view-binding
@@ -37,15 +32,6 @@ class MapsFragment : Fragment() {
     private var _binding: FragmentMapsBinding? = null
 
     lateinit var cities: List<City>
-    val placeAdapter = PlaceAdapter()
-    { city ->
-        Toast.makeText(
-            requireContext(),
-            "You have selected ${city.city} as your city",
-            Toast.LENGTH_SHORT
-        ).show()
-
-    }
 
 
     private val binding get() = _binding!!
@@ -74,10 +60,6 @@ class MapsFragment : Fragment() {
         return placesResponse
     }
 
-    companion object {
-        val instance: MapsFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { MapsFragment() }
-        private const val TAG = "MapsFragment"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,13 +78,33 @@ class MapsFragment : Fragment() {
 
 //        mapFragment?.setMenuVisibility(false)
 
-        initRecyclerView()
-        setUpSearchListener()
+        val activityContext = requireContext()
+
+        val preferences = ApplicationPreferences(activityContext)
+        val placeAdapter = initPlaceAdapter(preferences, activityContext)
+
+        initRecyclerView(placeAdapter)
+        setUpSearchListener(placeAdapter)
 
 
     }
 
-    private fun setUpSearchListener() {
+    private fun initPlaceAdapter(
+        preferences: ApplicationPreferences,
+        activityContext: Context
+    ): PlaceAdapter {
+        return PlaceAdapter() { city ->
+            preferences.setCity(city)
+            Toast.makeText(
+                activityContext,
+                "You have selected ${preferences.getCityName()} as your city",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+    private fun setUpSearchListener(placeAdapter: PlaceAdapter) {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -118,7 +120,7 @@ class MapsFragment : Fragment() {
         })
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(placeAdapter: PlaceAdapter) {
 
         binding.rvPlaces.apply {
             adapter = placeAdapter
