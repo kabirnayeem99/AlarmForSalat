@@ -10,4 +10,5 @@
     <string name="sample_hijri_full_date">23-07-1442</string>
     <string name="sample_city_name">Ōsaka</string>
     <string name="sample_countr_name">Japan</string>
+    <string name="comma">,</string>
 </resources>
