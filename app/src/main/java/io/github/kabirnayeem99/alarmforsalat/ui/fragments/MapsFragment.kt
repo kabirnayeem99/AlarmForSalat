@@ -1,6 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
+import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.utils.Constants
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 import io.github.kabirnayeem99.alarmforsalat.adapters.PlaceAdapter
@@ -23,7 +25,7 @@ import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
 import java.io.InputStream
 
 
-class MapsFragment() : Fragment() {
+class MapsFragment : Fragment() {
 
     /*
     follows https://developer.android.com/topic/libraries/view-binding
@@ -81,7 +83,12 @@ class MapsFragment() : Fragment() {
         val activityContext = requireContext()
 
         val preferences = ApplicationPreferences(activityContext)
-        val placeAdapter = initPlaceAdapter(preferences, activityContext)
+
+        if (preferences.getCityName().isNotEmpty()) {
+            binding.tvCurrentCity?.text = "Your current city is ${preferences.getCityName()}"
+        }
+
+        val placeAdapter = initPlaceAdapter(preferences)
 
         initRecyclerView(placeAdapter)
         setUpSearchListener(placeAdapter)
@@ -91,15 +98,11 @@ class MapsFragment() : Fragment() {
 
     private fun initPlaceAdapter(
         preferences: ApplicationPreferences,
-        activityContext: Context
     ): PlaceAdapter {
-        return PlaceAdapter() { city ->
+        return PlaceAdapter { city ->
             preferences.setCity(city)
-            Toast.makeText(
-                activityContext,
-                "You have selected ${preferences.getCityName()} as your city",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            binding.tvCurrentCity?.text = "Your current city is ${preferences.getCityName()}"
         }
 
     }

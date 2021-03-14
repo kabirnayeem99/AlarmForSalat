@@ -7,19 +7,42 @@
     android:padding="40sp"
     tools:context=".ui.fragments.MapsFragment">
 
+    <ImageView
+        android:id="@+id/ivLocation"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:src="@drawable/ic_location_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvCurrentCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12sp"
+        android:layout_marginHorizontal="5sp"
+        android:layout_marginBottom="20sp"
+        android:text="@string/desc_no_loc"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLocation" />
+
 
     <com.libizo.CustomEditText
         android:id="@+id/etSearch"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="450sp"
+        android:layout_width="350sp"
         android:layout_height="40sp"
         android:layout_marginTop="6sp"
         android:lines="1"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentCity"
         app:libIZO_setBorderColor="?attr/colorPrimary"
         app:libIZO_setBorderView="true"
         app:libIZO_setCornerRadius="10dp"
@@ -27,10 +50,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaces"
-        android:layout_width="400sp"
+        android:layout_width="300sp"
         android:layout_height="0dp"
         android:layout_marginTop="30sp"
         android:layout_marginBottom="30sp"
+        android:scrollIndicators="right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

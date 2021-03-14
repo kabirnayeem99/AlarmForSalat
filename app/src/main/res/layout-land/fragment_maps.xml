@@ -26,6 +26,36 @@
         app:libIZO_setCornerRadius="10dp"
         app:libIZO_setStrokeWidth="1dp" />
 
+
+    <ImageView
+        android:id="@+id/ivLocation"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
+        android:layout_marginTop="12sp"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/ic_location_picture"
+        app:layout_constraintEnd_toEndOf="@+id/tvCurrentCity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvCurrentCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12sp"
+        android:layout_marginHorizontal="5sp"
+        android:text="@string/desc_no_loc"
+        android:textAlignment="center"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rvPlaces"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLocation"
+        app:layout_constraintVertical_bias="0.306" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaces"
         android:layout_width="300sp"
@@ -33,8 +63,6 @@
         android:layout_marginTop="6sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/list_item_place" />
 

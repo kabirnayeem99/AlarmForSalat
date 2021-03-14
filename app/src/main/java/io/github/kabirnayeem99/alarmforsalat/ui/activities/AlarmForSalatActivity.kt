@@ -26,7 +26,7 @@ const val ACCESS_CODE_STORAGE = 2
 
 class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentAlarm: AlarmFragment
-    lateinit var fragmentLocation: MapsFragment
+    private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
     private var location: Location = Location("")
 
@@ -35,7 +35,7 @@ class AlarmForSalatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlarmForSalatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar)
         initFragments()
         initTabLayout()
         requestLocationPermission()

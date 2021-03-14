@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.databinding.ListItemSalatBinding
 
-class SalatTimingsRecyclerViewAdapter() :
+class SalatTimingsRecyclerViewAdapter :
     RecyclerView.Adapter<SalatTimingsRecyclerViewAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ListItemSalatBinding) :

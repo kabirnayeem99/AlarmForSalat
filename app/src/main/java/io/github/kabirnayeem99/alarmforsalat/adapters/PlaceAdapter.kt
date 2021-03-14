@@ -18,7 +18,7 @@ class PlaceAdapter(private val listener: (City) -> Unit) :
 
 
     inner class ViewHolder(val binding: ListItemPlaceBinding) :
-        RecyclerView.ViewHolder(binding.root) {}
+        RecyclerView.ViewHolder(binding.root)
 
 
     private val diffCallback = object : DiffUtil.ItemCallback<City>() {

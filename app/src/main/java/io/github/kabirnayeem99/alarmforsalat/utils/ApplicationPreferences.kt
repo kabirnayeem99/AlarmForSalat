@@ -7,14 +7,14 @@ import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
 
 class ApplicationPreferences(val context: Context) {
 
-    var applicationPreferences: ApplicationPreferences? = null
+    private var applicationPreferences: ApplicationPreferences? = null
     private var editor: SharedPreferences.Editor
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     init {
         editor = sharedPreferences.edit()
-        editor.apply();
+        editor.apply()
     }
 
 
@@ -25,7 +25,7 @@ class ApplicationPreferences(val context: Context) {
         return applicationPreferences
     }
 
-    public fun setCity(city: City) {
+    fun setCity(city: City) {
         editor.putString(Constants.PLACE_NAME_PREFERENCE, city.city)
         editor.putFloat(Constants.PLACE_LAT_PREFERENCE, city.lat.toFloat())
         editor.putFloat(Constants.PLACE_LONG_PREFERENCE, city.lng.toFloat())

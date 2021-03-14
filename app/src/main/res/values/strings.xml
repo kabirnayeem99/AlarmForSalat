@@ -11,4 +11,5 @@
     <string name="sample_city_name">Ōsaka</string>
     <string name="sample_countr_name">Japan</string>
     <string name="comma">,</string>
+    <string name="desc_no_loc">Your have not selected any location yet.</string>
 </resources>

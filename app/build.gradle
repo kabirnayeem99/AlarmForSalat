@@ -57,7 +57,6 @@ dependencies {
 
     // Lifecycle
     def lifecycle_version = "2.3.0"
-    def arch_version = "2.1.0"
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
