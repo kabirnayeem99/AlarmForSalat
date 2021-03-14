@@ -52,21 +52,32 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable
         return differ.currentList.size
     }
 
+    /*
+    Search Filter functionality
+     */
     override fun getFilter(): Filter {
         return filter
     }
 
+
     private var filter: Filter = object : Filter() {
+
+        /*
+        Invoked in a worker thread to filter the data according
+        to the constraint. Results computed by the filtering
+        operation are returned as a Filter
+         */
         override fun performFiltering(searchEntry: CharSequence?): FilterResults {
             val filteredCities: MutableList<City> = mutableListOf()
 
             if (searchEntry == null || searchEntry.isEmpty()) {
                 filteredCities.addAll(differ.currentList)
             } else {
-                val searchEntryPattern = searchEntry.toString().toLowerCase().trim()
+                val searchEntryPattern =
+                    searchEntry.toString().toLowerCase(Locale.getDefault()).trim()
                 for (city in differ.currentList) {
                     if (city.city.toLowerCase(Locale.ROOT)
-                            .contains(searchEntryPattern) || city.country.toLowerCase()
+                            .contains(searchEntryPattern) || city.country.toLowerCase(Locale.getDefault())
                             .contains(searchEntryPattern)
                     ) {
                         filteredCities.add(city)

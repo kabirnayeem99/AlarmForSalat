@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16sp"
+    android:orientation="horizontal"
+    android:padding="12sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:textAlignment="viewStart">
+
+            <TextView
+                android:id="@+id/tvSalatTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5:40"
+                android:textSize="28sp" />
+
+            <Space
+                android:layout_width="5sp"
+                android:layout_height="5sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvSalatName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Dhuar"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/lsAlarmToggle"
+        android:layout_width="70sp"
+        android:layout_height="40sp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:elevation="0dp"
+        android:textAlignment="center"
+        app:sb_background="@color/material_on_background_disabled"
+        app:sb_button_color="@color/white"
+        app:sb_checked_color="?attr/colorPrimary"
+        app:sb_checkline_color="?attr/colorPrimary"
+        app:sb_shadow_effect="false" />
+
+</RelativeLayout>
