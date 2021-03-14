@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,6 +21,10 @@ import io.github.kabirnayeem99.alarmforsalat.adapters.PlaceAdapter
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 
 
@@ -30,12 +35,21 @@ class MapsFragment : Fragment() {
     for view binding
    */
     private var _binding: FragmentMapsBinding? = null
-    val placeAdapter = PlaceAdapter()
+
     lateinit var cities: List<City>
+    val placeAdapter = PlaceAdapter()
+    { city ->
+        Toast.makeText(
+            requireContext(),
+            "You have selected ${city.city} as your city",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
 
 
     private val binding get() = _binding!!
-    lateinit var placesResponse: PlacesResponse
+    private lateinit var placesResponse: PlacesResponse
 
     private val callback = OnMapReadyCallback { googleMap ->
         val city = cities[0]
@@ -54,7 +68,6 @@ class MapsFragment : Fragment() {
 
         if (json != null) {
             placesResponse = Gson().fromJson(json, PlacesResponse::class.java)
-            Log.d(TAG, "retrieveCities: $placesResponse")
         } else {
             return listOf(City("", "", 0.0, 0.0, 20))
         }
@@ -113,6 +126,7 @@ class MapsFragment : Fragment() {
         }
 
         placeAdapter.differ.submitList(cities)
+
 
     }
 

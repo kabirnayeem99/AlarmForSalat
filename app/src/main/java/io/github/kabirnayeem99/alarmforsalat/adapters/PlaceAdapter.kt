@@ -1,6 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -12,7 +13,10 @@ import io.github.kabirnayeem99.alarmforsalat.databinding.ListItemPlaceBinding
 import java.util.*
 
 
-class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable {
+class PlaceAdapter(private val listener: (City) -> Unit) :
+    RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable {
+
+
     inner class ViewHolder(val binding: ListItemPlaceBinding) :
         RecyclerView.ViewHolder(binding.root) {}
 
@@ -42,7 +46,9 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable
                 with(binding) {
                     tvCityName.text = city
                     tvCountryName.text = country
+
                 }
+                itemView.setOnClickListener { listener(this) }
             }
         }
     }
@@ -51,6 +57,7 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
 
     /*
     Search Filter functionality
