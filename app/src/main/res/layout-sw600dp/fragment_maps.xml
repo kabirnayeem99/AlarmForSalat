@@ -7,14 +7,25 @@
     android:padding="40sp"
     tools:context=".ui.fragments.MapsFragment">
 
-    <ImageView
-        android:id="@+id/ivLocation"
-        android:layout_width="80sp"
-        android:layout_height="80sp"
-        android:src="@drawable/ic_location_picture"
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:layout_marginHorizontal="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/ivLocation"-->
+    <!--        android:layout_width="80sp"-->
+    <!--        android:layout_height="80sp"-->
+    <!--        android:src="@drawable/ic_location_picture"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
     <TextView
@@ -23,14 +34,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="12sp"
         android:layout_marginHorizontal="5sp"
-        android:layout_marginBottom="20sp"
+        android:layout_marginBottom="30sp"
         android:text="@string/desc_no_loc"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
 
     <com.libizo.CustomEditText
@@ -62,13 +73,4 @@
         app:layout_constraintTop_toBottomOf="@+id/etSearch"
         tools:listitem="@layout/list_item_place" />
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/map"-->
-    <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="200dp"-->
-    <!--        android:visibility="invisible"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="0sp"
+    android:padding="12sp"
     tools:context=".ui.fragments.MapsFragment">
 
 
     <com.libizo.CustomEditText
         android:id="@+id/etSearch"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
@@ -27,9 +26,10 @@
         app:libIZO_setStrokeWidth="1dp" />
 
 
-    <ImageView
-        android:id="@+id/ivLocation"
-        android:layout_width="130sp"
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
         android:layout_height="130sp"
         android:layout_marginTop="12sp"
         android:layout_marginBottom="0dp"
@@ -53,7 +53,7 @@
         app:layout_constraintEnd_toStartOf="@+id/rvPlaces"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLocation"
+        app:layout_constraintTop_toBottomOf="@+id/map"
         app:layout_constraintVertical_bias="0.306" />
 
     <androidx.recyclerview.widget.RecyclerView
