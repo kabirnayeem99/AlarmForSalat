@@ -1,16 +1,17 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
@@ -34,18 +35,27 @@ class MapsFragment : Fragment() {
     private var _binding: FragmentMapsBinding? = null
 
     lateinit var cities: List<City>
+    private var currentCityLatLang: MutableLiveData<List<Double>> = MutableLiveData()
+    var currentCityName: MutableLiveData<String> = MutableLiveData()
 
 
     private val binding get() = _binding!!
     private lateinit var placesResponse: PlacesResponse
 
     private val callback = OnMapReadyCallback { googleMap ->
-        val city = cities[0]
-        val ctg = LatLng(city.lat, city.lng)
-        googleMap.addMarker(
-            MarkerOptions().position(ctg).title("Marker in ${cities[0].city}")
-        )
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ctg, 14f))
+
+        currentCityLatLang.observe(viewLifecycleOwner, { cityLatLang ->
+            val currentLoc = LatLng(cityLatLang[0], cityLatLang[1])
+
+            currentCityName.observe(viewLifecycleOwner, { cityName ->
+                googleMap.addMarker(
+                    MarkerOptions().position(currentLoc).title("Marker in $cityName")
+                )
+            })
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
+        })
+
     }
 
     private fun retrieveCities(): List<City> {
@@ -75,17 +85,24 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         cities = retrieveCities()
-//        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-//        mapFragment?.getMapAsync(callback)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(callback)
 
-//        mapFragment?.setMenuVisibility(false)
+        mapFragment?.setMenuVisibility(false)
 
         val activityContext = requireContext()
 
         val preferences = ApplicationPreferences(activityContext)
 
+        val currentCityLat = preferences.getLat()
+        val currentCityLong = preferences.getLong()
+        currentCityLatLang.postValue(arrayListOf(currentCityLat, currentCityLong))
+
+
+
         if (preferences.getCityName().isNotEmpty()) {
-            binding.tvCurrentCity?.text = "Your current city is ${preferences.getCityName()}"
+            currentCityName.postValue(preferences.getCityName())
+            binding.tvCurrentCity.text = "Your current city is ${preferences.getCityName()}"
         }
 
         val placeAdapter = initPlaceAdapter(preferences)
@@ -102,7 +119,7 @@ class MapsFragment : Fragment() {
         return PlaceAdapter { city ->
             preferences.setCity(city)
 
-            binding.tvCurrentCity?.text = "Your current city is ${preferences.getCityName()}"
+            binding.tvCurrentCity.text = "Your current city is ${preferences.getCityName()}"
         }
 
     }
