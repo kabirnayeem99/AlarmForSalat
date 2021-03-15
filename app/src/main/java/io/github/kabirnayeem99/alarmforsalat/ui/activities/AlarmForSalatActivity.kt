@@ -33,7 +33,7 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
     lateinit var viewModel: AdhanViewModel
-    lateinit var preferences: ApplicationPreferences
+    private lateinit var preferences: ApplicationPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

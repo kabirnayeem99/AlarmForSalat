@@ -34,7 +34,7 @@ class MapsFragment : Fragment() {
 
     lateinit var cities: List<City>
     private var currentCityLatLang: MutableLiveData<List<Double>> = MutableLiveData()
-    var currentCityName: MutableLiveData<String> = MutableLiveData()
+    private var currentCityName: MutableLiveData<String> = MutableLiveData()
 
 
     private val binding get() = _binding!!
