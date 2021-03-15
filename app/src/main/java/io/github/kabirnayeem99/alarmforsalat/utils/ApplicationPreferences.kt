@@ -25,8 +25,9 @@ class ApplicationPreferences(val context: Context) {
         return applicationPreferences
     }
 
-    fun setCity(city: City) {
+    fun setLocation(city: City) {
         editor.putString(Constants.PLACE_NAME_PREFERENCE, city.city)
+        editor.putString(Constants.PLACE_COUNTRY_NAME_PREFERENCE, city.country)
         editor.putFloat(Constants.PLACE_LAT_PREFERENCE, city.lat.toFloat())
         editor.putFloat(Constants.PLACE_LONG_PREFERENCE, city.lng.toFloat())
         editor.apply()
@@ -44,6 +45,14 @@ class ApplicationPreferences(val context: Context) {
         val cityName = sharedPreferences.getString(Constants.PLACE_NAME_PREFERENCE, "")
         if (cityName != null) {
             return cityName
+        }
+        return ""
+    }
+
+    fun getCountryName(): String {
+        val countryName = sharedPreferences.getString(Constants.PLACE_COUNTRY_NAME_PREFERENCE, "")
+        if (countryName != null) {
+            return countryName
         }
         return ""
     }

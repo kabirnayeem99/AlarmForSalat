@@ -12,23 +12,28 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
 import io.github.kabirnayeem99.alarmforsalat.data.LocationService
 import io.github.kabirnayeem99.alarmforsalat.data.LocationService.LocationResult
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
+import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
+import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
+import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
+import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
 
 
 const val ACCESS_CODE_LOCATION = 1
-const val ACCESS_CODE_STORAGE = 2
 
 class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentAlarm: AlarmFragment
     private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
-    private var location: Location = Location("")
+    lateinit var viewModel: AdhanViewModel
+    lateinit var preferences: ApplicationPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +41,25 @@ class AlarmForSalatActivity : AppCompatActivity() {
         binding = ActivityAlarmForSalatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        setUpPreferences()
+        setUpViewModel()
         initFragments()
         initTabLayout()
         requestLocationPermission()
         getUserLocation()
+    }
+
+    private fun setUpPreferences() {
+        preferences = ApplicationPreferences(this)
+    }
+
+    private fun setUpViewModel() {
+        val repo = AdhanRepo()
+        val viewModelFactory =
+            AdhanViewModelFactory(repo, preferences.getCityName(), preferences.getCountryName())
+
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AdhanViewModel::class.java)
     }
 
 

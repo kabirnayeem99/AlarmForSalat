@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAdapter
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
+import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
+import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
+import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 
 
 class AlarmFragment : Fragment(R.layout.fragment_alarm) {
@@ -21,6 +26,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     private var _binding: FragmentAlarmBinding? = null
 
     private val binding get() = _binding!!
+    private lateinit var viewModel: AdhanViewModel
 
     companion object {
         val instance: AlarmFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { AlarmFragment() }
@@ -38,31 +44,64 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val arrayList = initialiseSampleData()
+        viewModel = (activity as AlarmForSalatActivity).viewModel
         val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
 
+        createObserver(salatTimingsRecyclerViewAdapter)
+
+        setUpRecyclerView(salatTimingsRecyclerViewAdapter)
+
+    }
+
+    private fun setUpRecyclerView(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
         val rvFiveSalats = _binding?.rvFiveSalats
         rvFiveSalats?.let {
             it.adapter = salatTimingsRecyclerViewAdapter
 
             it.layoutManager = LinearLayoutManager(context)
         }
+    }
 
-        salatTimingsRecyclerViewAdapter.differ.submitList(arrayList)
+    private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
+        viewModel.adhanTime.observe(viewLifecycleOwner, Observer { resources ->
+            when (resources) {
+                is Resource.Error -> {
+                    resources.message?.let { message ->
+                        Toast.makeText(
+                            context,
+                            "The location can't be found. \n$message",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                is Resource.Success -> {
+                    resources.data?.data?.timings?.let {
+                        with(it) {
+                            val arrayList = initialiseData(Fajr, Dhuhr, Asr, Maghrib, Isha)
+                            salatTimingsRecyclerViewAdapter.differ.submitList(arrayList)
+                        }
+                    }
+                }
+            }
+        })
 
     }
 
-    private fun initialiseSampleData(): ArrayList<SalatTiming> {
+    private fun initialiseData(
+        fajrTime: String, dhuhrTime: String, asrTime: String,
+        maghribTime: String, ishaTime: String,
+    ): ArrayList<SalatTiming> {
         val arrayList = arrayListOf<SalatTiming>()
-        val fajr = SalatTiming(1, "Fajr", "5:00", true)
+        val fajr = SalatTiming(1, "Fajr", fajrTime, true)
         arrayList.add(fajr)
-        val dhuhr = SalatTiming(2, "Dhuhr", "5:00", false)
+        val dhuhr = SalatTiming(2, "Dhuhr", dhuhrTime, false)
         arrayList.add(dhuhr)
-        val asr = SalatTiming(3, "Asr", "5:00", true)
+        val asr = SalatTiming(3, "Asr", asrTime, true)
         arrayList.add(asr)
-        val maghrib = SalatTiming(4, "Maghrib", "5:00", false)
+        val maghrib = SalatTiming(4, "Maghrib", maghribTime, false)
         arrayList.add(maghrib)
-        val isha = SalatTiming(5, "Isha", "5:00", true)
+        val isha = SalatTiming(5, "Isha", ishaTime, true)
         arrayList.add(isha)
         return arrayList
     }

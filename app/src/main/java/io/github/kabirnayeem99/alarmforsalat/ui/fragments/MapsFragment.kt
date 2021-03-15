@@ -5,9 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -117,7 +115,7 @@ class MapsFragment : Fragment() {
         preferences: ApplicationPreferences,
     ): PlaceAdapter {
         return PlaceAdapter { city ->
-            preferences.setCity(city)
+            preferences.setLocation(city)
 
             binding.tvCurrentCity.text = "Your current city is ${preferences.getCityName()}"
         }
