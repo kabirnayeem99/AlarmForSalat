@@ -60,7 +60,7 @@ class MapsFragment : Fragment() {
 
         val inputStream: InputStream = requireActivity().assets.open(Constants.placesFileName)
 
-        val json: String? = Utilities.fileToJson(inputStream)
+        val json: String? = Utilities.inputStreamToJson(inputStream)
 
         if (json != null) {
             placesResponse = Gson().fromJson(json, PlacesResponse::class.java)

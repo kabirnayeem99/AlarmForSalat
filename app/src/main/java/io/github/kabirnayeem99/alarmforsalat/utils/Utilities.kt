@@ -1,6 +1,8 @@
 package io.github.kabirnayeem99.alarmforsalat.utils
 
 import android.util.Log
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
+import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 import java.io.InputStream
 import java.nio.charset.Charset
 
@@ -8,7 +10,7 @@ object Utilities {
 
     private const val TAG = "Utilities"
 
-    fun fileToJson(inputStream: InputStream): String? {
+    fun inputStreamToJson(inputStream: InputStream): String? {
         var json: String? = null
         try {
             // InputStream is used to read data from a source
@@ -22,5 +24,23 @@ object Utilities {
             Log.e(TAG, "onViewCreated: $e")
         }
         return json
+    }
+
+    fun stringToTime(stringTime: String): Time {
+        val stringArray = stringTime.split(":").toTypedArray()
+        val tempHour: String = stringArray[0]
+        lateinit var hour: String
+        val minute: String = stringArray[1]
+        lateinit var meridiem: Meridiem
+
+        if (tempHour.toInt() > 12) {
+            meridiem = Meridiem.PM
+            hour = (tempHour.toInt() - 12).toString()
+        } else {
+            meridiem = Meridiem.AM
+            hour = tempHour
+        }
+
+        return Time(hour, minute, meridiem)
     }
 }

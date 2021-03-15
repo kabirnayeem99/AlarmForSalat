@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.databinding.ListItemSalatBinding
+import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 
 class SalatTimingsRecyclerViewAdapter :
     RecyclerView.Adapter<SalatTimingsRecyclerViewAdapter.ViewHolder>() {
@@ -38,9 +39,9 @@ class SalatTimingsRecyclerViewAdapter :
         with(holder) {
             with(differ.currentList[position]) {
                 binding.tvSalatName.text = name
-                binding.tvSalatTime.text = time
+                binding.tvSalatTime.text = "${time.hour}:${time.minutes}"
+                binding.meridiem.text = time.meridiem.toString()
                 binding.lsAlarmToggle.isChecked = toggle
-
             }
         }
 

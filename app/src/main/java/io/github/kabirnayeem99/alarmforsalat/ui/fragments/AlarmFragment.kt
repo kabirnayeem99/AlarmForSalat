@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAdapter
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
+import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 
 
 class AlarmFragment : Fragment(R.layout.fragment_alarm) {
@@ -78,7 +80,13 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                 is Resource.Success -> {
                     resources.data?.data?.timings?.let {
                         with(it) {
-                            val arrayList = initialiseData(Fajr, Dhuhr, Asr, Maghrib, Isha)
+                            val arrayList = initialiseData(
+                                Utilities.stringToTime(Fajr),
+                                Utilities.stringToTime(Dhuhr),
+                                Utilities.stringToTime(Asr),
+                                Utilities.stringToTime(Maghrib),
+                                Utilities.stringToTime(Isha),
+                            )
                             salatTimingsRecyclerViewAdapter.differ.submitList(arrayList)
                         }
                     }
@@ -89,8 +97,8 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     }
 
     private fun initialiseData(
-        fajrTime: String, dhuhrTime: String, asrTime: String,
-        maghribTime: String, ishaTime: String,
+        fajrTime: Time, dhuhrTime: Time, asrTime: Time,
+        maghribTime: Time, ishaTime: Time,
     ): ArrayList<SalatTiming> {
         val arrayList = arrayListOf<SalatTiming>()
         val fajr = SalatTiming(1, "Fajr", fajrTime, true)
