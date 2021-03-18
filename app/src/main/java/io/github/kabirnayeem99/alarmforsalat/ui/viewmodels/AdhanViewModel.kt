@@ -1,11 +1,9 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.viewmodels
 
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import kotlinx.coroutines.launch
@@ -30,13 +28,16 @@ class AdhanViewModel(
         adhanTime.postValue(handleAdhanTimeResponse(response))
     }
 
-    private fun handleAdhanTimeResponse(response: Response<AladhanApiResponse>): Resource<AladhanApiResponse>? {
+    private fun handleAdhanTimeResponse(response: Response<AladhanApiResponse>): Resource<AladhanApiResponse> {
         if (response.isSuccessful) {
             response.body()?.let { aladhanApiResponse ->
                 return Resource.Success(aladhanApiResponse)
             }
+        } else {
+
+            return Resource.Error("The response was not successful. ${response.message()}")
         }
 
-        return Resource.Error(response.message())
+        return Resource.Loading()
     }
 }

@@ -13,10 +13,13 @@ import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAd
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
+import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AlarmFragment : Fragment(R.layout.fragment_alarm) {
@@ -52,7 +55,10 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         createObserver(salatTimingsRecyclerViewAdapter)
 
         setUpRecyclerView(salatTimingsRecyclerViewAdapter)
+        val alarmService = context?.let { AlarmService(it) }
 
+        val c = Calendar.getInstance()
+        alarmService?.setExactAlarm(c.timeInMillis)
     }
 
     private fun setUpRecyclerView(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
@@ -65,18 +71,8 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     }
 
     private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
-        viewModel.adhanTime.observe(viewLifecycleOwner, Observer { resources ->
+        viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
             when (resources) {
-                is Resource.Error -> {
-                    resources.message?.let { message ->
-                        Toast.makeText(
-                            context,
-                            "The location can't be found. \n$message",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
                 is Resource.Success -> {
                     resources.data?.data?.timings?.let {
                         with(it) {
@@ -90,6 +86,19 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                             salatTimingsRecyclerViewAdapter.differ.submitList(arrayList)
                         }
                     }
+                }
+
+                is Resource.Error -> {
+                    resources.message?.let { message ->
+                        Toast.makeText(
+                            context,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                else -> {
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
             }
         })
