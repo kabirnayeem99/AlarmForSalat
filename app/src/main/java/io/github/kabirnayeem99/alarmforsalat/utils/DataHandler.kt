@@ -7,7 +7,6 @@ import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 object DataHandler {
 
     private var salatTimeList = arrayListOf<Time>()
-    private var salatNameList = arrayListOf<String>("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
 
     fun setTimeInString(salatTimeStringList: ArrayList<String>) {
         for (salatTime in salatTimeStringList) {
@@ -20,7 +19,14 @@ object DataHandler {
         val arrayList = arrayListOf<SalatTiming>()
 
         for (index in 0..4) {
-            arrayList.add(SalatTiming(index, salatNameList[index], salatTimeList[index], true))
+            arrayList.add(
+                SalatTiming(
+                    index,
+                    Constants.SALAT_NAME_LIST[index],
+                    salatTimeList[index],
+                    true
+                )
+            )
         }
 //        val fajr = SalatTiming(1, "Fajr", fajrTime, true)
 //        arrayList.add(fajr)

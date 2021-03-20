@@ -11,4 +11,5 @@ object Constants {
     const val PLACE_LAT_PREFERENCE: String = "place_lat"
     const val placesFileName: String = "places.json"
     const val BASE_URL: String = "https://api.aladhan.com"
+    var SALAT_NAME_LIST = arrayListOf<String>("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
 }
