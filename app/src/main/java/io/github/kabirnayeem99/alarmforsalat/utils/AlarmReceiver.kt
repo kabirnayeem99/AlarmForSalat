@@ -14,14 +14,13 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive: started alarmreciever")
+        Log.d(TAG, "onReceive: started alarm receiver")
         intent?.let {
             val timeInMillis: Long = it.getLongExtra(Constants.EXTRA_EXACT_ALARM, 0)
             when (it.action) {
                 Constants.SET_EXACT_ALARM -> {
                     context?.let { ctxt ->
                         buildNotifications(ctxt, "Salat time", convertDate(timeInMillis))
-
                     }
                 }
                 else -> {

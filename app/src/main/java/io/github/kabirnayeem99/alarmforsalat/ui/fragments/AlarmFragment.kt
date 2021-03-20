@@ -16,6 +16,7 @@ import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
+import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 import java.util.*
@@ -76,14 +77,17 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                 is Resource.Success -> {
                     resources.data?.data?.timings?.let {
                         with(it) {
-                            val arrayList = initialiseData(
-                                Utilities.stringToTime(Fajr),
-                                Utilities.stringToTime(Dhuhr),
-                                Utilities.stringToTime(Asr),
-                                Utilities.stringToTime(Maghrib),
-                                Utilities.stringToTime(Isha),
-                            )
-                            salatTimingsRecyclerViewAdapter.differ.submitList(arrayList)
+                            DataHandler.setTimeInString(
+                                arrayListOf(
+                                    Fajr,
+                                    Dhuhr,
+                                    Asr,
+                                    Maghrib,
+                                    Isha
+                                )
+                            ).also {
+                                salatTimingsRecyclerViewAdapter.differ.submitList(DataHandler.initialiseData())
+                            }
                         }
                     }
                 }
@@ -98,28 +102,16 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                     }
                 }
                 else -> {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Your Salat times are loading...",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })
 
     }
 
-    private fun initialiseData(
-        fajrTime: Time, dhuhrTime: Time, asrTime: Time,
-        maghribTime: Time, ishaTime: Time,
-    ): ArrayList<SalatTiming> {
-        val arrayList = arrayListOf<SalatTiming>()
-        val fajr = SalatTiming(1, "Fajr", fajrTime, true)
-        arrayList.add(fajr)
-        val dhuhr = SalatTiming(2, "Dhuhr", dhuhrTime, false)
-        arrayList.add(dhuhr)
-        val asr = SalatTiming(3, "Asr", asrTime, true)
-        arrayList.add(asr)
-        val maghrib = SalatTiming(4, "Maghrib", maghribTime, false)
-        arrayList.add(maghrib)
-        val isha = SalatTiming(5, "Isha", ishaTime, true)
-        arrayList.add(isha)
-        return arrayList
-    }
+
 }
