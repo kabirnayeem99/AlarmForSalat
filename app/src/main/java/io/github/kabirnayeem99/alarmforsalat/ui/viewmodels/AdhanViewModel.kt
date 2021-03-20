@@ -1,5 +1,6 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,30 +15,45 @@ class AdhanViewModel(
     city: String,
     country: String,
 ) : ViewModel() {
+
+    companion object {
+        private const val TAG = "AdhanViewModel"
+    }
+
     val adhanTime: MutableLiveData<Resource<AladhanApiResponse>> = MutableLiveData()
 
     init {
         getAdhanTime(city, country)
     }
 
+
     private fun getAdhanTime(city: String, country: String) = viewModelScope.launch {
         adhanTime.postValue(Resource.Loading())
 
-        val response = repo.getAdhanTime(city, country)
+        val response: Response<AladhanApiResponse> = repo.getAdhanTime(city, country)
+
+
 
         adhanTime.postValue(handleAdhanTimeResponse(response))
     }
 
+
     private fun handleAdhanTimeResponse(response: Response<AladhanApiResponse>): Resource<AladhanApiResponse> {
+
         if (response.isSuccessful) {
-            response.body()?.let { aladhanApiResponse ->
-                return Resource.Success(aladhanApiResponse)
+            response.body()?.let {
+
+                Log.d(
+                    TAG,
+                    "handleAdhanTimeResponse: the response was successful ${response.body()}"
+                )
+                return Resource.Success(it)
             }
-        } else {
-
-            return Resource.Error("The response was not successful. ${response.message()}")
         }
+        return Resource.Error(response.message())
 
-        return Resource.Loading()
+
+//        return Resource.Loading()
+
     }
 }

@@ -1,5 +1,8 @@
 package io.github.kabirnayeem99.alarmforsalat.utils
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
@@ -9,6 +12,17 @@ import java.nio.charset.Charset
 object Utilities {
 
     private const val TAG = "Utilities"
+
+
+    fun isInternetAvailable(context: Context): Boolean {
+        var isConnected: Boolean = false // Initial Value
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (activeNetwork != null && activeNetwork.isConnected)
+            isConnected = true
+        return isConnected
+    }
 
     fun inputStreamToJson(inputStream: InputStream): String? {
         var json: String? = null

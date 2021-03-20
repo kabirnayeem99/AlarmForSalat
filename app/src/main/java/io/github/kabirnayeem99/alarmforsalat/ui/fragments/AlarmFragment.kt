@@ -1,6 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     private lateinit var viewModel: AdhanViewModel
 
     companion object {
+        private const val TAG = "AlarmFragment"
         val instance: AlarmFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { AlarmFragment() }
     }
 
@@ -75,6 +77,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
             when (resources) {
                 is Resource.Success -> {
+                    Log.d(TAG, "createObserver: ${resources.data}")
                     resources.data?.data?.timings?.let {
                         with(it) {
                             DataHandler.setTimeInString(
@@ -93,6 +96,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                 }
 
                 is Resource.Error -> {
+                    Log.d(TAG, "createObserver: ${resources.message}")
                     resources.message?.let { message ->
                         Toast.makeText(
                             context,
@@ -102,6 +106,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                     }
                 }
                 else -> {
+                    Log.d(TAG, "createObserver: loading")
                     Toast.makeText(
                         context,
                         "Your Salat times are loading...",

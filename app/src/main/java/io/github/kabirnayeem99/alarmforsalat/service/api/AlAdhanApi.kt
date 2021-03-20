@@ -1,5 +1,6 @@
 package io.github.kabirnayeem99.alarmforsalat.service.api
 
+import dimitrovskif.smartcache.SmartCall
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
 import retrofit2.Response
 import retrofit2.http.GET

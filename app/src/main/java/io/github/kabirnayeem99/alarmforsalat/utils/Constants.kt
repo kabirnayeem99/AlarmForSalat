@@ -12,4 +12,6 @@ object Constants {
     const val placesFileName: String = "places.json"
     const val BASE_URL: String = "https://api.aladhan.com"
     var SALAT_NAME_LIST = arrayListOf<String>("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
+    const val DB_NAME = "alarm_for_salat_db"
+    const val DB_TABLE_NAME_SALAT_TIMINGS = "salat_timings_table"
 }

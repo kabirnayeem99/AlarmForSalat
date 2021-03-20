@@ -19,6 +19,7 @@ import io.github.kabirnayeem99.alarmforsalat.data.LocationService
 import io.github.kabirnayeem99.alarmforsalat.data.LocationService.LocationResult
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
+import io.github.kabirnayeem99.alarmforsalat.service.db.SalatTimingsDatabase
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
@@ -55,7 +56,9 @@ class AlarmForSalatActivity : AppCompatActivity() {
     }
 
     private fun setUpViewModel() {
-        val repo = AdhanRepo()
+
+        val db = SalatTimingsDatabase(this)
+        val repo = AdhanRepo(db)
         val viewModelFactory =
             AdhanViewModelFactory(repo, preferences.getCityName(), preferences.getCountryName())
 

@@ -102,4 +102,6 @@ dependencies {
     // Notify (https://github.com/Karn/notify)
     implementation "io.karn:notify:1.4.0"
 
+    compile 'com.github.dimitrovskif:SmartCache:0.2'
+
 }
