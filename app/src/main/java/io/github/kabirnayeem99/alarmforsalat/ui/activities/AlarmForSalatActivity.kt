@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PagerAdapter
@@ -21,6 +22,7 @@ import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.service.db.SalatTimingsDatabase
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
+import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
 import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
@@ -57,10 +59,17 @@ class AlarmForSalatActivity : AppCompatActivity() {
             popup.menuInflater.inflate(R.menu.popup_menu, popup.menu);
             popup.setOnMenuItemClickListener {
                 Log.d(TAG, "setUpPopUpMenu: you clicked upon it")
+                loadFragment(SettingsFragment())
                 true
             }
             popup.show()
         }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.flMain, fragment)
+        transaction.commit()
     }
 
     private fun setUpPreferences() {
