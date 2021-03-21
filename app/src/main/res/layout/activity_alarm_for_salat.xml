@@ -23,16 +23,33 @@
             android:soundEffectsEnabled="false"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:soundEffectsEnabled="false"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="scrollable"
-                app:tabRippleColor="?android:colorBackground"
-                app:tabTextColor="?attr/colorPrimary" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"
+                    android:soundEffectsEnabled="false"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="scrollable"
+                    app:tabRippleColor="?android:colorBackground"
+                    app:tabTextColor="?attr/colorPrimary" />
+
+                <ImageView
+                    android:id="@+id/ivMoreHoriz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:src="@drawable/ic_more_vert" />
+
+            </LinearLayout>
+
 
         </androidx.appcompat.widget.Toolbar>
 

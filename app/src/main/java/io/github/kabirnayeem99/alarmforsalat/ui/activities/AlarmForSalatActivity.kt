@@ -3,14 +3,13 @@ package io.github.kabirnayeem99.alarmforsalat.ui.activities
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import io.github.kabirnayeem99.alarmforsalat.R
@@ -47,8 +46,21 @@ class AlarmForSalatActivity : AppCompatActivity() {
         setUpViewModel()
         initFragments()
         initTabLayout()
+        setUpPopUpMenu()
         requestLocationPermission()
         getUserLocation()
+    }
+
+    private fun setUpPopUpMenu() {
+        binding.ivMoreHoriz.setOnClickListener { view ->
+            val popup = PopupMenu(this, view)
+            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu);
+            popup.setOnMenuItemClickListener {
+                Log.d(TAG, "setUpPopUpMenu: you clicked upon it")
+                true
+            }
+            popup.show()
+        }
     }
 
     private fun setUpPreferences() {
@@ -155,26 +167,6 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private fun initFragments() {
         fragmentAlarm = AlarmFragment()
         fragmentLocation = MapsFragment()
-    }
-
-
-    /*
-    Options menu settings
-     */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menuSettingsMain -> {
-                Toast.makeText(this, "You selected settings", Toast.LENGTH_SHORT).show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
 
