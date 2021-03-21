@@ -1,5 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.utils
 
+import java.io.InputStream
+
 object Constants {
     const val EXTRA_EXACT_ALARM: String = "extra_exact_alarm"
     const val SET_EXACT_ALARM: String = "set_exact_alarm"
@@ -14,4 +16,7 @@ object Constants {
     var SALAT_NAME_LIST = arrayListOf<String>("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
     const val DB_NAME = "alarm_for_salat_db"
     const val DB_TABLE_NAME_SALAT_TIMINGS = "salat_timings_table"
+    private val inputStream: InputStream = App.context.assets.open(Constants.placesFileName)
+    val PLACES = Utilities.inputStreamToJson(inputStream)
+
 }

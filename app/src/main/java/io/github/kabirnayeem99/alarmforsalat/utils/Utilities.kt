@@ -4,6 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.util.Log
+import com.google.gson.Gson
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 import java.io.InputStream
@@ -13,6 +16,16 @@ object Utilities {
 
     private const val TAG = "Utilities"
 
+
+    suspend fun getPlacesInCityList(): List<City> {
+
+        val json: String? = Constants.PLACES
+
+        if (json != null) {
+            return Gson().fromJson(json, PlacesResponse::class.java)
+        }
+        return listOf(City("", "", 0.0, 0.0, 20))
+    }
 
     fun isInternetAvailable(context: Context): Boolean {
         var isConnected: Boolean = false // Initial Value
