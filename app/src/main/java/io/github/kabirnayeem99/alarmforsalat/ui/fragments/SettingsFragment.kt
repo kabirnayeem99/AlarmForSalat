@@ -24,7 +24,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        // fixes Fragments displayed over each other
         container?.removeAllViews()
+
         return super.onCreateView(inflater, container, savedInstanceState)
 
     }
