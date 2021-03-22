@@ -1,6 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
 import android.os.Bundle
+import android.provider.Contacts
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -21,6 +22,10 @@ import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
 import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 
 
@@ -105,6 +110,14 @@ class MapsFragment : Fragment() {
 
         val placeAdapter = initPlaceAdapter(preferences)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val citiesTempIn = Utilities.getPlacesInCityList()
+            withContext(Dispatchers.Main) {
+                placeAdapter.differ.submitList(citiesTempIn)
+            }
+        }
+
+
         initRecyclerView(placeAdapter)
         setUpSearchListener(placeAdapter)
 
@@ -144,9 +157,6 @@ class MapsFragment : Fragment() {
             adapter = placeAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
-        placeAdapter.differ.submitList(cities)
-
 
     }
 
