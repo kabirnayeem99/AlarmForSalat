@@ -1,5 +1,8 @@
 package io.github.kabirnayeem99.alarmforsalat.utils
 
+import com.google.gson.Gson
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
@@ -28,16 +31,17 @@ object DataHandler {
                 )
             )
         }
-//        val fajr = SalatTiming(1, "Fajr", fajrTime, true)
-//        arrayList.add(fajr)
-//        val dhuhr = SalatTiming(2, "Dhuhr", dhuhrTime, false)
-//        arrayList.add(dhuhr)
-//        val asr = SalatTiming(3, "Asr", asrTime, true)
-//        arrayList.add(asr)
-//        val maghrib = SalatTiming(4, "Maghrib", maghribTime, false)
-//        arrayList.add(maghrib)
-//        val isha = SalatTiming(5, "Isha", ishaTime, true)
-//        arrayList.add(isha)
         return arrayList
+    }
+
+
+    fun getPlacesInCityList(): List<City> {
+
+        val json: String? = Constants.PLACES
+
+        if (json != null) {
+            return Gson().fromJson(json, PlacesResponse::class.java)
+        }
+        return listOf(City("", "", 0.0, 0.0, 20))
     }
 }

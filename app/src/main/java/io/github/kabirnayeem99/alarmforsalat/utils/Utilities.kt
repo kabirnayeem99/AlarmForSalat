@@ -17,15 +17,6 @@ object Utilities {
     private const val TAG = "Utilities"
 
 
-    suspend fun getPlacesInCityList(): List<City> {
-
-        val json: String? = Constants.PLACES
-
-        if (json != null) {
-            return Gson().fromJson(json, PlacesResponse::class.java)
-        }
-        return listOf(City("", "", 0.0, 0.0, 20))
-    }
 
     fun isInternetAvailable(context: Context): Boolean {
         var isConnected: Boolean = false // Initial Value

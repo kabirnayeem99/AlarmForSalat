@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,6 +23,7 @@ import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
 import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
+import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,21 +63,6 @@ class MapsFragment : Fragment() {
 
     }
 
-    private fun retrieveCities(): List<City> {
-
-        val inputStream: InputStream = requireActivity().assets.open(Constants.placesFileName)
-
-        val json: String? = Utilities.inputStreamToJson(inputStream)
-
-        if (json != null) {
-            placesResponse = Gson().fromJson(json, PlacesResponse::class.java)
-        } else {
-            return listOf(City("", "", 0.0, 0.0, 20))
-        }
-        return placesResponse
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,7 +74,7 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cities = retrieveCities()
+        cities = listOf<City>()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
@@ -111,7 +98,7 @@ class MapsFragment : Fragment() {
         val placeAdapter = initPlaceAdapter(preferences)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val citiesTempIn = Utilities.getPlacesInCityList()
+            val citiesTempIn = DataHandler.getPlacesInCityList()
             withContext(Dispatchers.Main) {
                 placeAdapter.differ.submitList(citiesTempIn)
             }
@@ -139,12 +126,9 @@ class MapsFragment : Fragment() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count > 0) {
-                    placeAdapter.filter.filter(s)
-                } else {
-                    placeAdapter.differ.submitList(cities)
-                }
+                placeAdapter.filter.filter(s)
             }
+
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
