@@ -103,6 +103,9 @@ dependencies {
     // Notify (https://github.com/Karn/notify)
     implementation "io.karn:notify:1.4.0"
 
-    compile 'com.github.dimitrovskif:SmartCache:0.2'
+    implementation 'com.github.dimitrovskif:SmartCache:0.2'
+
+    // DataStore (SharedPreferences Replacement)
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
 
 }

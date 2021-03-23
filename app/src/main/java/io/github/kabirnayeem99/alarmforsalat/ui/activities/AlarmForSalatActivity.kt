@@ -5,8 +5,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -25,7 +23,7 @@ import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
-import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
+import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
 
 
 const val ACCESS_CODE_LOCATION = 1
@@ -35,7 +33,8 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
     lateinit var viewModel: AdhanViewModel
-    private lateinit var preferences: ApplicationPreferences
+
+    private val settingsManager = SettingsManager.instance
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +43,6 @@ class AlarmForSalatActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        setUpPreferences()
         setUpViewModel()
         initFragments()
         initTabLayout()
@@ -72,16 +70,17 @@ class AlarmForSalatActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    private fun setUpPreferences() {
-        preferences = ApplicationPreferences(this)
-    }
 
     private fun setUpViewModel() {
 
         val db = SalatTimingsDatabase(this)
         val repo = AdhanRepo(db)
-        val viewModelFactory =
-            AdhanViewModelFactory(repo, preferences.getCityName(), preferences.getCountryName())
+        lateinit var viewModelFactory: AdhanViewModelFactory
+        var cityName: String = "Dhaka"
+        var countryName: String = "Bangladesh"
+
+
+        viewModelFactory = AdhanViewModelFactory(repo, cityName, countryName)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AdhanViewModel::class.java)
     }

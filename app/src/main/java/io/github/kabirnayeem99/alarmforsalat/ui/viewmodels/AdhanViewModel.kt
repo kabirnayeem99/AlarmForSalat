@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
+import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -20,6 +22,8 @@ class AdhanViewModel(
         private const val TAG = "AdhanViewModel"
     }
 
+    private val settingsManager = SettingsManager.instance
+
     val adhanTime: MutableLiveData<Resource<AladhanApiResponse>> = MutableLiveData()
 
     init {
@@ -30,7 +34,9 @@ class AdhanViewModel(
     private fun getAdhanTime(city: String, country: String) = viewModelScope.launch {
         adhanTime.postValue(Resource.Loading())
 
-        val response: Response<AladhanApiResponse> = repo.getAdhanTime(city, country)
+        val cityName: String = settingsManager.cityName.first()
+        val countryName: String = settingsManager.countryName.first()
+        val response: Response<AladhanApiResponse> = repo.getAdhanTime(cityName, countryName)
 
 
 
