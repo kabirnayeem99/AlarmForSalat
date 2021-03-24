@@ -7,32 +7,36 @@ import androidx.lifecycle.viewModelScope
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
+import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class AdhanViewModel(
-    private val repo: AdhanRepo,
-    city: String,
-    country: String,
-) : ViewModel() {
+class AdhanViewModel(private val repo: AdhanRepo) : ViewModel() {
+
+    private val settingsManager = SettingsManager.instance
 
     companion object {
         private const val TAG = "AdhanViewModel"
     }
 
+
     val adhanTime: MutableLiveData<Resource<AladhanApiResponse>> = MutableLiveData()
 
+
     init {
-        getAdhanTime(city, country)
+        getAdhanTime()
     }
 
 
-    private fun getAdhanTime(city: String, country: String) = viewModelScope.launch {
+    private fun getAdhanTime() = viewModelScope.launch {
         adhanTime.postValue(Resource.Loading())
 
-        val response: Response<AladhanApiResponse> = repo.getAdhanTime(city, country)
 
+        val cityName: String = settingsManager.cityName.first()
+        val countryName: String = settingsManager.countryName.first()
 
+        val response: Response<AladhanApiResponse> = repo.getAdhanTime(cityName, countryName)
 
         adhanTime.postValue(handleAdhanTimeResponse(response))
     }
@@ -42,7 +46,6 @@ class AdhanViewModel(
 
         if (response.isSuccessful) {
             response.body()?.let {
-
                 Log.d(
                     TAG,
                     "handleAdhanTimeResponse: the response was successful ${response.body()}"
@@ -51,9 +54,6 @@ class AdhanViewModel(
             }
         }
         return Resource.Error(response.message())
-
-
-//        return Resource.Loading()
 
     }
 }

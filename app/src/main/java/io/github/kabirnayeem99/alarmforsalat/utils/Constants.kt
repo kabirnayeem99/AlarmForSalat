@@ -5,6 +5,7 @@ import java.io.InputStream
 object Constants {
     const val EXTRA_EXACT_ALARM: String = "extra_exact_alarm"
     const val SET_EXACT_ALARM: String = "set_exact_alarm"
+    const val ACTION_SET_REPETITIVE_EXACT : String = "set_repetitive_alarm"
     const val PLACE_COUNTRY_NAME_PREFERENCE: String = "place_country"
     const val SHARED_PREFERENCES_NAME: String =
         "com.github.kabirnayeem99.alarmforsalat.application_preferences"

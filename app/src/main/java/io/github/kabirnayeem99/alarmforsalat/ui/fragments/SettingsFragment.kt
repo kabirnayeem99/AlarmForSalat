@@ -10,8 +10,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.utils.App
-import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferences
-import io.github.kabirnayeem99.alarmforsalat.utils.Constants
+import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferencesRepository
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -25,7 +24,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         Log.d(TAG, "onCreatePreferences: ${preferenceManager.sharedPreferencesName}")
         Log.d(
             TAG, "onCreatePreferences: ${
-                ApplicationPreferences(App.context)
+                ApplicationPreferencesRepository(App.context)
                     .getCityName()
             }"
         )

@@ -7,21 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAdapter
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
-import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
-import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
-import java.util.*
-import kotlin.collections.ArrayList
+import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
 
 
 class AlarmFragment : Fragment(R.layout.fragment_alarm) {
@@ -34,6 +28,8 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     private val binding get() = _binding!!
     private lateinit var viewModel: AdhanViewModel
+    private val settingsManager: SettingsManager = SettingsManager.instance
+
 
     companion object {
         private const val TAG = "AlarmFragment"
@@ -58,22 +54,21 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         createObserver(salatTimingsRecyclerViewAdapter)
 
         setUpRecyclerView(salatTimingsRecyclerViewAdapter)
-        val alarmService = context?.let { AlarmService(it) }
 
-        val c = Calendar.getInstance()
-        alarmService?.setExactAlarm(c.timeInMillis)
+
     }
+
 
     private fun setUpRecyclerView(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
         val rvFiveSalats = _binding?.rvFiveSalats
         rvFiveSalats?.let {
             it.adapter = salatTimingsRecyclerViewAdapter
-
             it.layoutManager = LinearLayoutManager(context)
         }
     }
 
     private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
+
         viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
             when (resources) {
                 is Resource.Success -> {
@@ -81,13 +76,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                     resources.data?.data?.timings?.let {
                         with(it) {
                             DataHandler.setTimeInString(
-                                arrayListOf(
-                                    Fajr,
-                                    Dhuhr,
-                                    Asr,
-                                    Maghrib,
-                                    Isha
-                                )
+                                arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
                             ).also {
                                 salatTimingsRecyclerViewAdapter.differ.submitList(DataHandler.initialiseData())
                             }
@@ -115,8 +104,5 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
                 }
             }
         })
-
     }
-
-
 }
