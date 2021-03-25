@@ -29,7 +29,7 @@
 
             <Space
                 android:layout_width="5sp"
-                android:layout_height="5sp" />
+                android:layout_height="0dp" />
 
             <TextView
                 android:id="@+id/meridiem"

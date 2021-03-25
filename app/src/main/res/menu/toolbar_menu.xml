@@ -4,5 +4,6 @@
     <item
         android:id="@+id/menuSettingsMain"
         android:icon="@drawable/ic_more_horiz"
+        android:title="Settings"
         app:showAsAction="always" />
 </menu>

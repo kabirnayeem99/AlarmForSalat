@@ -2,8 +2,6 @@ package io.github.kabirnayeem99.alarmforsalat.service.api
 
 
 import android.util.Log
-import dimitrovskif.smartcache.BasicCaching
-import dimitrovskif.smartcache.SmartCallFactory
 import io.github.kabirnayeem99.alarmforsalat.utils.App
 import io.github.kabirnayeem99.alarmforsalat.utils.Constants
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
@@ -35,7 +33,7 @@ class RetrofitInstance {
 
 
             // retrofit
-            var onlineInterceptor: Interceptor = Interceptor { chain ->
+            val onlineInterceptor = Interceptor { chain ->
                 val response = chain.proceed(chain.request())
                 val maxAge =
                     60 // read from cache for 60 seconds even if there is internet connection
@@ -45,7 +43,7 @@ class RetrofitInstance {
                     .build()
             }
 
-            var offlineInterceptor = Interceptor { chain ->
+            val offlineInterceptor = Interceptor { chain ->
                 var request: Request = chain.request()
                 if (!Utilities.isInternetAvailable(App.context)) {
                     val maxStale = 60 * 60 * 24 * 2 // Offline cache available for 2 days

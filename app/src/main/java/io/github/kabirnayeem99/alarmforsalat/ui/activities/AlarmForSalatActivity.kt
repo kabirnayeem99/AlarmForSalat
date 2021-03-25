@@ -24,7 +24,6 @@ import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
-import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 
 
@@ -35,8 +34,6 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
     lateinit var viewModel: AdhanViewModel
-
-    private val settingsManager = SettingsManager.instance
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +53,7 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private fun setUpPopUpMenu() {
         binding.ivMoreHoriz.setOnClickListener { view ->
             val popup = PopupMenu(this, view)
-            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu);
+            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
             popup.setOnMenuItemClickListener {
                 Log.d(TAG, "setUpPopUpMenu: you clicked upon it")
                 loadFragment(SettingsFragment())
@@ -89,7 +86,7 @@ class AlarmForSalatActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     with(resources.data?.data?.timings) {
                         if (this != null) {
-                            val salatArray = arrayListOf<String>(Fajr, Dhuhr, Asr, Maghrib, Isha)
+                            val salatArray = arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
                             for ((index, salatTime) in salatArray.withIndex()) {
                                 val timeNamaz = Utilities.stringToTime(salatTime)
                                 Utilities.setUpAlarm(timeNamaz, index)
@@ -99,6 +96,13 @@ class AlarmForSalatActivity : AppCompatActivity() {
 
 
                     }
+                }
+
+                is Resource.Loading -> {
+                    Toast.makeText(this, "Setting up your alarm", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(this, "Your alarm could not be set", Toast.LENGTH_SHORT).show()
                 }
             }
         })

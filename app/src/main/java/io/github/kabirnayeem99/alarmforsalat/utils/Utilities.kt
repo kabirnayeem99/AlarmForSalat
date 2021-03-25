@@ -47,7 +47,7 @@ object Utilities {
 
 
     fun isInternetAvailable(context: Context): Boolean {
-        var isConnected: Boolean = false // Initial Value
+        var isConnected = false // Initial Value
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
