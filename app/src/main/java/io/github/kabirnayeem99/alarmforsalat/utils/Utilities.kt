@@ -4,18 +4,46 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.util.Log
-import com.google.gson.Gson
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.City
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.PlacesResponse
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
+import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.util.*
 
 object Utilities {
 
     private const val TAG = "Utilities"
 
+
+    fun setUpAlarm(time: Time, alarmId: Int) {
+
+        when (time.meridiem) {
+            Meridiem.AM -> {
+                val alarmService = AlarmService(App.context)
+
+                val c = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, time.hour.toInt())
+                    set(Calendar.MINUTE, time.minutes.toInt())
+                    set(Calendar.SECOND, 0)
+                }
+
+                alarmService.setExactAlarm(c.timeInMillis, alarmId)
+            }
+            else -> {
+                val alarmService = AlarmService(App.context)
+
+                val c = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, time.hour.toInt() + 12)
+                    set(Calendar.MINUTE, time.minutes.toInt())
+                    set(Calendar.SECOND, 0)
+                }
+
+                alarmService.setExactAlarm(c.timeInMillis, alarmId)
+            }
+        }
+
+    }
 
 
     fun isInternetAvailable(context: Context): Boolean {

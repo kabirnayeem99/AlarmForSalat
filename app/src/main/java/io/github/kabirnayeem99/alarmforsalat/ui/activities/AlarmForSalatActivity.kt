@@ -23,7 +23,9 @@ import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
+import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 
 
 const val ACCESS_CODE_LOCATION = 1
@@ -80,6 +82,26 @@ class AlarmForSalatActivity : AppCompatActivity() {
         val viewModelFactory = AdhanViewModelFactory(repo)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AdhanViewModel::class.java)
+
+
+        viewModel.adhanTime.observe(this, { resources ->
+            when (resources) {
+                is Resource.Success -> {
+                    with(resources.data?.data?.timings) {
+                        if (this != null) {
+                            val salatArray = arrayListOf<String>(Fajr, Dhuhr, Asr, Maghrib, Isha)
+                            for ((index, salatTime) in salatArray.withIndex()) {
+                                val timeNamaz = Utilities.stringToTime(salatTime)
+                                Utilities.setUpAlarm(timeNamaz, index)
+
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        })
     }
 
 

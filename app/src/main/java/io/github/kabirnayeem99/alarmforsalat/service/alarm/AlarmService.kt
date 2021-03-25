@@ -70,7 +70,7 @@ class AlarmService(private val context: Context) {
     private fun getPendingIntent(intent: Intent, alarmId: Int): PendingIntent =
         PendingIntent.getBroadcast(
             context,
-            alarmId + System.currentTimeMillis().toInt(), //avoiding
+            alarmId, //avoiding
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         ).also {
