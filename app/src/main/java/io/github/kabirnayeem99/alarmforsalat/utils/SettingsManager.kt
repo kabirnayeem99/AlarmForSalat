@@ -14,6 +14,7 @@ import java.io.IOException
 
 class SettingsManager(val context: Context) {
 
+    // creates a data store
     private val dataStore = context.createDataStore(DATA_STORE_NAME)
 
 
@@ -27,6 +28,16 @@ class SettingsManager(val context: Context) {
         private const val TAG = "SettingsManager"
     }
 
+    /**
+     * Sets the user selected city
+     * to the data store
+     *
+     * sets country name
+     * sets city name
+     * sets latitude, and longitude
+     *
+     * @param city [City]
+     */
     suspend fun setCity(city: City) {
         dataStore.edit { pref ->
             Log.d(TAG, "setCity: current city is $city")

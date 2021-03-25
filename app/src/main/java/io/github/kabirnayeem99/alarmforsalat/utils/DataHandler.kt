@@ -7,11 +7,16 @@ import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import java.util.*
 
+/**
+ * Object class that handles various forms of data
+ */
 object DataHandler {
-    private const val TAG = "DataHandler"
 
     private var salatTimeList = arrayListOf<Time>()
 
+    /**
+     * set string salat time list
+     */
     fun setTimeInString(salatTimeStringList: ArrayList<String>) {
         for (salatTime in salatTimeStringList) {
             salatTimeList.add(Utilities.stringToTime(salatTime))
@@ -19,7 +24,10 @@ object DataHandler {
     }
 
 
-
+    /**
+     * Returns a Salat Timing List
+     * @return salat timing list [ArrayList]
+     */
     fun initialiseData(
     ): ArrayList<SalatTiming> {
         val arrayList = arrayListOf<SalatTiming>()
@@ -38,6 +46,11 @@ object DataHandler {
     }
 
 
+    /**
+     * Gets the places from assets
+     * And returns in City Object List form
+     * @return list of City [List]
+     */
     fun getPlacesInCityList(): List<City> {
 
         val json: String? = Constants.PLACES
