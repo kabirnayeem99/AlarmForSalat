@@ -8,12 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.databinding.ListItemSalatBinding
 
+/**
+ * Adapter class for Salat Timings Recycler View
+ *
+ * Adapter is a bridge between UI component and data source
+ * that helps us to fill data in UI component.
+ *
+ */
 class SalatTimingsRecyclerViewAdapter :
     RecyclerView.Adapter<SalatTimingsRecyclerViewAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ListItemSalatBinding) :
         RecyclerView.ViewHolder(binding.root)
 
+    /*
+    This call back informs about the changes
+     */
     private var differCallBack: DiffUtil.ItemCallback<SalatTiming> =
         object : DiffUtil.ItemCallback<SalatTiming>() {
             override fun areItemsTheSame(oi: SalatTiming, ni: SalatTiming) = oi.id == ni.id
@@ -21,6 +31,12 @@ class SalatTimingsRecyclerViewAdapter :
             override fun areContentsTheSame(oi: SalatTiming, ni: SalatTiming) = oi == ni
         }
 
+    /*
+    The AsyncListDiffer can consume the values from a LiveData of
+    List and present the data simply for an adapter.
+    It computes differences in list contents via DiffUtil on a background thread
+    as new List are received.
+   */
     var differ = AsyncListDiffer(this, differCallBack)
 
 
