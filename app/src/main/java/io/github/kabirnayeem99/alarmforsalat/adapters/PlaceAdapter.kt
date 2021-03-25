@@ -13,8 +13,16 @@ import java.util.*
 
 
 /**
+ * Adapter class for Place Recycler View
+ *
  * Adapter is a bridge between UI component and data source
  * that helps us to fill data in UI component.
+ *
+ * It implements [Filterable] which adds the getFilter() function
+ * that can be used to constrain data with a filtering pattern.
+ *
+ * @param listener which is a lambda to implement onClickListener on Place
+ *
  */
 class PlaceAdapter(private val listener: (City) -> Unit) :
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable {
@@ -24,6 +32,9 @@ class PlaceAdapter(private val listener: (City) -> Unit) :
         RecyclerView.ViewHolder(binding.root)
 
 
+    /*
+    Call when any data is changed
+     */
     private val diffCallback = object : DiffUtil.ItemCallback<City>() {
         override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
             return oldItem == newItem
@@ -33,6 +44,14 @@ class PlaceAdapter(private val listener: (City) -> Unit) :
             return oldItem.city == newItem.city
         }
     }
+
+
+    /*
+    The AsyncListDiffer can consume the values from a LiveData of
+     List and present the data simply for an adapter.
+     It computes differences in list contents via DiffUtil on a background thread
+      as new List are received.
+     */
     val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,6 +62,12 @@ class PlaceAdapter(private val listener: (City) -> Unit) :
         return ViewHolder(binding)
     }
 
+    /*
+     * onBindViewHolder is called by RecyclerView to
+     * display the data at the position parameter.
+     * @param holder [ViewHolder]
+     * @param position [Int]
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             with(differ.currentList[position]) {
@@ -57,6 +82,9 @@ class PlaceAdapter(private val listener: (City) -> Unit) :
     }
 
 
+    /*
+    Count how many item is in the list
+     */
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
