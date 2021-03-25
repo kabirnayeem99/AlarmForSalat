@@ -1,7 +1,6 @@
 package io.github.kabirnayeem99.alarmforsalat.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -13,6 +12,10 @@ import io.github.kabirnayeem99.alarmforsalat.databinding.ListItemPlaceBinding
 import java.util.*
 
 
+/**
+ * Adapter is a bridge between UI component and data source
+ * that helps us to fill data in UI component.
+ */
 class PlaceAdapter(private val listener: (City) -> Unit) :
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>(), Filterable {
 
