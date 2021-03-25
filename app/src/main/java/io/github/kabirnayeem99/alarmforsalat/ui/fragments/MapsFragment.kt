@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+/**
+ * This fragment shows a list of places to select from
+ * In tablet and landscape shows a map beside the list
+ */
 class MapsFragment : Fragment() {
 
     /*
@@ -36,10 +41,6 @@ class MapsFragment : Fragment() {
    */
 
 
-    companion object {
-        private const val TAG = "MapsFragment"
-    }
-
     private var _binding: FragmentMapsBinding? = null
     private val preferences = ApplicationPreferencesRepository(App.context)
     private val settingsManager = SettingsManager.instance
@@ -47,7 +48,18 @@ class MapsFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+
+    /**
+     * With the loading of the map
+     * it sets the marker
+     * zooms in to the user selected place
+     */
     private val callback = OnMapReadyCallback { googleMap ->
+
+        // sets current location from the data gotten from the data store
+        settingsManager.cityName.asLiveData().observe(viewLifecycleOwner, Observer {
+            //todo: will add code to listen to changes
+        })
 
         val currentLoc: LatLng =
             if (preferences.getCityName().trim().isNotEmpty()) {
@@ -59,11 +71,13 @@ class MapsFragment : Fragment() {
                 LatLng(0.0, 0.0)
             }
 
+        // adds a marker to the map
         googleMap.addMarker(
             MarkerOptions().position(currentLoc)
                 .title("Marker in ${preferences.getCityName()}")
         )
 
+        // zooms the camera to the specified location
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
 
     }
@@ -84,15 +98,6 @@ class MapsFragment : Fragment() {
 
         mapFragment?.setMenuVisibility(false)
 
-        if (preferences.getCityName().isNotEmpty()) {
-            binding.tvCurrentCity.text = "Your current city is ${preferences.getCityName()}"
-        }
-
-
-        settingsManager.cityName.asLiveData().observe(viewLifecycleOwner, {
-            binding.tvCurrentCity.text =
-                "Your current city is $it"
-        })
 
         val placeAdapter = initPlaceAdapter()
 
@@ -103,11 +108,21 @@ class MapsFragment : Fragment() {
             }
         }
 
-
         initRecyclerView(placeAdapter)
         setUpSearchListener(placeAdapter)
+        setUpPlaceChangeTextChange()
 
 
+    }
+
+    /**
+     * Based on the change in selected place, it changes the text view
+     */
+    private fun setUpPlaceChangeTextChange() {
+        settingsManager.cityName.asLiveData().observe(viewLifecycleOwner, {
+            binding.tvCurrentCity.text =
+                "Your current city is $it"
+        })
     }
 
     private fun initPlaceAdapter(): PlaceAdapter {
@@ -122,6 +137,9 @@ class MapsFragment : Fragment() {
 
     }
 
+    /**
+     * This function listens to the change in text filed and passes it to place adapter
+     */
     private fun setUpSearchListener(placeAdapter: PlaceAdapter) {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
 

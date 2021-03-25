@@ -15,9 +15,11 @@ import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
-import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
 
 
+/**
+ * Fragments that hold the Alarm Lists
+ */
 class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     /*
@@ -28,11 +30,12 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     private val binding get() = _binding!!
     private lateinit var viewModel: AdhanViewModel
-    private val settingsManager: SettingsManager = SettingsManager.instance
 
 
     companion object {
         private const val TAG = "AlarmFragment"
+
+        // creates a single instance of alarm fragment follows Singleton pattern
         val instance: AlarmFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { AlarmFragment() }
     }
 
@@ -59,6 +62,9 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     }
 
 
+    /**
+     * Sets up the recycler view
+     */
     private fun setUpRecyclerView(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
         val rvFiveSalats = _binding?.rvFiveSalats
         rvFiveSalats?.let {
@@ -67,6 +73,11 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         }
     }
 
+    /**
+     * Observes the AlAdhan Api for changes
+     * and fills the recycler view based on that
+     * @param salatTimingsRecyclerViewAdapter [SalatTimingsRecyclerViewAdapter]
+     */
     private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
 
         viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->

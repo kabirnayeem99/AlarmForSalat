@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import io.github.kabirnayeem99.alarmforsalat.R
-import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentDateBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
+import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 
+/**
+ * Fragment to show dates and a calendar view on second tab
+ */
 class DateFragment : Fragment() {
     /*
     follows https://developer.android.com/topic/libraries/view-binding
@@ -40,6 +41,15 @@ class DateFragment : Fragment() {
 
         val viewModel = (activity as AlarmForSalatActivity).viewModel
 
+        createObserver(viewModel)
+    }
+
+    /**
+     * Observes the AlAdhan Api for changes
+     * and fills the recycler view based on that
+     * @param viewModel [AdhanViewModel]
+     */
+    private fun createObserver(viewModel: AdhanViewModel) {
         viewModel.adhanTime.observe(viewLifecycleOwner,
             { resources ->
                 when (resources) {
