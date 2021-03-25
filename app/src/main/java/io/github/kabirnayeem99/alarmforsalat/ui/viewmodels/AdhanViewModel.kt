@@ -20,7 +20,7 @@ class AdhanViewModel(private val repo: AdhanRepo) : ViewModel() {
         private const val TAG = "AdhanViewModel"
     }
 
-
+    // Is success, error or loading based on the state
     val adhanTime: MutableLiveData<Resource<AladhanApiResponse>> = MutableLiveData()
 
 
