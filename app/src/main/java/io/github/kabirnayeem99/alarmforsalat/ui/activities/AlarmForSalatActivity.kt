@@ -18,8 +18,6 @@ import io.github.kabirnayeem99.alarmforsalat.data.LocationService.LocationResult
 import io.github.kabirnayeem99.alarmforsalat.databinding.ActivityAlarmForSalatBinding
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.service.db.SalatTimingsDatabase
-import io.github.kabirnayeem99.alarmforsalat.ui.fragments.AlarmFragment
-import io.github.kabirnayeem99.alarmforsalat.ui.fragments.MapsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
@@ -30,8 +28,6 @@ import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 const val ACCESS_CODE_LOCATION = 1
 
 class AlarmForSalatActivity : AppCompatActivity() {
-    private lateinit var fragmentAlarm: AlarmFragment
-    private lateinit var fragmentLocation: MapsFragment
     private lateinit var binding: ActivityAlarmForSalatBinding
     lateinit var viewModel: AdhanViewModel
 
@@ -43,13 +39,15 @@ class AlarmForSalatActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setUpViewModel()
-        initFragments()
         initTabLayout()
         setUpPopUpMenu()
         requestLocationPermission()
         getUserLocation()
     }
 
+    /**
+     * Creates a pop up menu, with only a Settings Menu Item
+     */
     private fun setUpPopUpMenu() {
         binding.ivMoreHoriz.setOnClickListener { view ->
             val popup = PopupMenu(this, view)
@@ -63,6 +61,11 @@ class AlarmForSalatActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * It replaces the main frame layout
+     * based on the user interaction, such as swiping
+     * or tapping on tab menu
+     */
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.flMain, fragment)
@@ -70,6 +73,11 @@ class AlarmForSalatActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * set up view model for for preparing and managing
+     * Adhan Data for [AlarmForSalatActivity] and
+     * other fragments
+     */
     private fun setUpViewModel() {
 
         val db = SalatTimingsDatabase(this)
@@ -80,8 +88,15 @@ class AlarmForSalatActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AdhanViewModel::class.java)
 
+        setAlarmBasedOnViewModel(viewModel)
+    }
 
-        viewModel.adhanTime.observe(this, { resources ->
+    /**
+     * set the alarm based on the data found through view model
+     */
+    private fun setAlarmBasedOnViewModel(vm: AdhanViewModel) {
+
+        vm.adhanTime.observe(this, { resources ->
             when (resources) {
                 is Resource.Success -> {
                     with(resources.data?.data?.timings) {
@@ -90,11 +105,8 @@ class AlarmForSalatActivity : AppCompatActivity() {
                             for ((index, salatTime) in salatArray.withIndex()) {
                                 val timeNamaz = Utilities.stringToTime(salatTime)
                                 Utilities.setUpAlarm(timeNamaz, index)
-
                             }
                         }
-
-
                     }
                 }
 
@@ -180,6 +192,9 @@ class AlarmForSalatActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialises tabs
+     */
     private fun initTabLayout() {
         with(binding) {
             pager.apply {
@@ -193,11 +208,6 @@ class AlarmForSalatActivity : AppCompatActivity() {
             tabs.getTabAt(2)?.setIcon(R.drawable.ic_location)
         }
 
-    }
-
-    private fun initFragments() {
-        fragmentAlarm = AlarmFragment()
-        fragmentLocation = MapsFragment()
     }
 
 
