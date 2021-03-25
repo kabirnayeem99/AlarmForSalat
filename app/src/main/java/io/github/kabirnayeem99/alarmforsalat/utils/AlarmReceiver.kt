@@ -10,31 +10,41 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
+/**
+ * This broadcast receiver (receiver), which is an Android component
+ * which allows  to register for Alarm events.
+ * All registered receivers for this event gives a notification by the Android
+ * runtime once this event happens or alarm time comes.
+ */
 class AlarmReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "AlarmReceiver"
     }
 
+    /**
+     * Triggers once the event happens
+     */
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d(TAG, "onReceive: started alarm receiver")
-        intent.let {
 
-            val timeInMillis: Long = it.getLongExtra(Constants.EXTRA_EXACT_ALARM, 0)
-            when (it.action) {
-                Constants.SET_EXACT_ALARM -> {
-                    buildNotifications(context, "Salat time", convertDate(timeInMillis))
-                }
-                Constants.ACTION_SET_REPETITIVE_EXACT -> {
-                    setRepetitiveAlarm(AlarmService(context))
-                    buildNotifications(
-                        context,
-                        "Set Repetitive Exact Time",
-                        convertDate(timeInMillis)
-                    )
-                }
-                else -> {
-                    println("Nothing happened")
-                }
+        // gets the time through intent extras
+        val timeInMillis: Long = intent.getLongExtra(Constants.EXTRA_EXACT_ALARM, 0)
+
+        // sets event based on the action
+        when (intent.action) {
+            Constants.SET_EXACT_ALARM -> {
+                buildNotifications(context, "Salat time", convertDate(timeInMillis))
+            }
+            Constants.ACTION_SET_REPETITIVE_EXACT -> {
+                setRepetitiveAlarm(AlarmService(context))
+                buildNotifications(
+                    context,
+                    "Set Repetitive Exact Time",
+                    convertDate(timeInMillis)
+                )
+            }
+            else -> {
+                println("Nothing happened")
             }
         }
 
@@ -42,6 +52,9 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 
+    /**
+     * sets repetitive alarm by 1 day
+     */
     private fun setRepetitiveAlarm(alarmService: AlarmService) {
         val cal = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis + TimeUnit.DAYS.toMillis(1)
@@ -50,6 +63,9 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmService.setRepetitiveAlarm(cal.timeInMillis, 0)
     }
 
+    /**
+     * Creates notification to show on even receive
+     */
     private fun buildNotifications(context: Context, title: String, salatName: String) {
         Notify.with(context).content {
             this.title = title
@@ -58,6 +74,9 @@ class AlarmReceiver : BroadcastReceiver() {
             .show()
     }
 
+    /**
+     * Converts the milli second time into string
+     */
     private fun convertDate(timeMillis: Long): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
         return formatter.format(Date(timeMillis))
