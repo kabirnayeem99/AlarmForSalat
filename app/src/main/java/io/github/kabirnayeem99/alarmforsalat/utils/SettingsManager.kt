@@ -49,7 +49,7 @@ class SettingsManager(val context: Context) {
     }
 
 
-    val cityName: Flow<String> = dataStore.data
+    val cityNameFlow: Flow<String> = dataStore.data
         .catch {
             if (it is IOException) {
                 it.printStackTrace()
@@ -62,7 +62,34 @@ class SettingsManager(val context: Context) {
             return@map preference[CITY_NAME] ?: ""
         }
 
-    val countryName: Flow<String> = dataStore.data
+
+    val cityLatFlow: Flow<Float> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                it.printStackTrace()
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }.map { preferences ->
+            return@map preferences[LOC_LATITUDE] ?: 0.0f
+
+        }
+
+    val cityLongFlow: Flow<Float> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                it.printStackTrace()
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }.map { preferences ->
+            return@map preferences[LAC_LONGITUDE] ?: 0.0f
+        }
+
+
+    val countryNameFlow: Flow<String> = dataStore.data
         .catch {
             if (it is IOException) {
                 it.printStackTrace()
@@ -74,4 +101,6 @@ class SettingsManager(val context: Context) {
         .map { preference ->
             return@map preference[COUNTRY_NAME] ?: ""
         }
+
+
 }

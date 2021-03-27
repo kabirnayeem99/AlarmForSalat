@@ -10,6 +10,7 @@ import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 object Utilities {
 
@@ -89,4 +90,51 @@ object Utilities {
 
         return Time(hour, minute, meridiem)
     }
+
+    fun azanTimeToMyTime(time: com.azan.Time): Time {
+
+        val tempHour: Int = time.hour
+        var hour: Int = 0
+        val minute: Int = time.minute
+
+        lateinit var meridiem: Meridiem
+
+        when {
+            time.hour > 12 -> {
+                hour = (tempHour - 12)
+                meridiem = Meridiem.PM
+            }
+            else -> {
+                hour = tempHour
+                meridiem = Meridiem.AM
+            }
+        }
+
+
+
+        return Time(pad(hour), pad(minute), meridiem)
+    }
+
+    fun pad(num: Int): String {
+        val output = StringBuilder(num.toString())
+        if (output.length < 2) {
+            output.insert(0, "0")
+        }
+        return output.toString()
+
+    }
+
+    fun getGmtDiff(): Double {
+        val mCalendar: Calendar = GregorianCalendar()
+        val mTimeZone = mCalendar.timeZone
+        val mGMTOffset = mTimeZone.rawOffset
+        Log.d(
+            TAG,
+            "getGmtDiff:GMT offset is ${
+                TimeUnit.HOURS.convert(mGMTOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
+            } hours "
+        )
+        return TimeUnit.HOURS.convert(mGMTOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
+    }
+
 }

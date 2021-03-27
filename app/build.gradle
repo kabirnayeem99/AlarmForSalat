@@ -108,4 +108,7 @@ dependencies {
     // DataStore (SharedPreferences Replacement)
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
 
+    //AZAN (https://github.com/ahmedeltaher/Prayer-Times-Android-Azan)
+    implementation 'com.github.ahmedeltaher:Azan:3.0'
+
 }

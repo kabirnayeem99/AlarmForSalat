@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAdapter
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
+import io.github.kabirnayeem99.alarmforsalat.utils.AdhanTimeUtilities
 import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
+import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
 
 
 /**
@@ -54,7 +58,24 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         viewModel = (activity as AlarmForSalatActivity).viewModel
         val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
 
-        createObserver(salatTimingsRecyclerViewAdapter)
+//        createObserver(salatTimingsRecyclerViewAdapter)
+
+        val settingsManager = SettingsManager.instance
+
+        with(settingsManager) {
+            cityLatFlow.asLiveData().observe(viewLifecycleOwner, Observer { cityLat ->
+
+                cityLongFlow.asLiveData().observe(viewLifecycleOwner, Observer { cityLong ->
+                    salatTimingsRecyclerViewAdapter.differ.submitList(
+                        AdhanTimeUtilities(
+                            cityLat.toDouble(),
+                            cityLong.toDouble()
+                        ).getSalatTimingList()
+                    )
+                })
+
+            })
+        }
 
         setUpRecyclerView(salatTimingsRecyclerViewAdapter)
 

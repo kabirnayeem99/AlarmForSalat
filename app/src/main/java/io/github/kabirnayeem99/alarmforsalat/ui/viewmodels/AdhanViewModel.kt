@@ -33,8 +33,8 @@ class AdhanViewModel(private val repo: AdhanRepo) : ViewModel() {
         adhanTime.postValue(Resource.Loading())
 
 
-        val cityName: String = settingsManager.cityName.first()
-        val countryName: String = settingsManager.countryName.first()
+        val cityName: String = settingsManager.cityNameFlow.first()
+        val countryName: String = settingsManager.countryNameFlow.first()
 
         val response: Response<AladhanApiResponse> = repo.getAdhanTime(cityName, countryName)
 

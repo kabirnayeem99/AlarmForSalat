@@ -23,6 +23,7 @@ import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
+import java.util.*
 
 
 const val ACCESS_CODE_LOCATION = 1
@@ -43,7 +44,9 @@ class AlarmForSalatActivity : AppCompatActivity() {
         setUpPopUpMenu()
         requestLocationPermission()
         getUserLocation()
+
     }
+
 
     /**
      * Creates a pop up menu, with only a Settings Menu Item

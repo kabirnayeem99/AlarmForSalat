@@ -57,7 +57,7 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
 
         // sets current location from the data gotten from the data store
-        settingsManager.cityName.asLiveData().observe(viewLifecycleOwner, Observer {
+        settingsManager.cityNameFlow.asLiveData().observe(viewLifecycleOwner, Observer {
             //todo: will add code to listen to changes
         })
 
@@ -119,7 +119,7 @@ class MapsFragment : Fragment() {
      * Based on the change in selected place, it changes the text view
      */
     private fun setUpPlaceChangeTextChange() {
-        settingsManager.cityName.asLiveData().observe(viewLifecycleOwner, {
+        settingsManager.cityNameFlow.asLiveData().observe(viewLifecycleOwner, {
             binding.tvCurrentCity.text =
                 "Your current city is $it"
         })
