@@ -1,5 +1,11 @@
 # AlarmForSalat
-Salat time reminder application built with Kotlin for Android. 
+Salat time reminder application built with Kotlin for Android.
+
+## Todo
+
+* Need to fix taking too much time loading alarms
+* Reloading maps with each tab change
+* Need to initialise TimeZoneMap only once and with each location change
 
 Type   | Files | Lines
 -------|-------|------------
