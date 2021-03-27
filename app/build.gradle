@@ -111,4 +111,12 @@ dependencies {
     //AZAN (https://github.com/ahmedeltaher/Prayer-Times-Android-Azan)
     implementation 'com.github.ahmedeltaher:Azan:3.0'
 
+    // Time Zone Map (https://github.com/dustin-johnson/timezonemap)
+    implementation('us.dustinj.timezonemap:timezonemap:4.0') {
+        // Exclude standard compression library
+        exclude group: 'com.github.luben', module: 'zstd-jni'
+
+    }
+    implementation 'com.github.luben:zstd-jni:1.4.4-3@aar'
+
 }

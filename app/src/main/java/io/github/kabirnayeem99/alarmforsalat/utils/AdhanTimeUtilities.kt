@@ -16,10 +16,10 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
     }
 
 
-    fun getSalatTimingList(): List<SalatTiming> {
+    suspend fun getSalatTimingList(): List<SalatTiming> {
 
         val today = SimpleDate(GregorianCalendar())
-        val location = Location(latitude, longitude, 6.0, 0)
+        val location = Location(latitude, longitude, Utilities.getGmtDiff(), 0)
 //        val location = Location(30.045411, 31.236735, 2.0, 0)
         val azan = Azan(location, Method.MUSLIM_LEAGUE)
         val prayerTimes = azan.getPrayerTimes(today)
@@ -75,7 +75,7 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
         Log.d(
             TAG, "initialisation of class: \n" +
                     "----------------results------------------------\n" +
-                    "Timezone --> ${TimeZone.getTimeZone("UTC")}\n" +
+                    "Timezone --> ${TimeZone.getTimeZone("Bangladesh/Dhaka")}\n" +
                     "Fajr --> $fajr\n" +
                     "Dhuhr --> $dhuhr\n" +
                     "Asr --> $asr\n" +

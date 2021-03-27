@@ -7,10 +7,12 @@ import android.util.Log
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
+import us.dustinj.timezonemap.TimeZoneMap
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 object Utilities {
 
@@ -125,16 +127,22 @@ object Utilities {
     }
 
     fun getGmtDiff(): Double {
-        val mCalendar: Calendar = GregorianCalendar()
-        val mTimeZone = mCalendar.timeZone
-        val mGMTOffset = mTimeZone.rawOffset
+        val cal: Calendar = GregorianCalendar()
+        Log.d(TAG, "getGmtDiff: started")
+//        val timeZone = cal.timeZone
+        val map = TimeZoneMap.forRegion(23.0, 90.0, 24.0, 91.0)
+        val dhaka =
+            map.getOverlappingTimeZone(23.733727342637064, 90.39015353913155)?.zoneId
+        val timeZone = TimeZone.getTimeZone(dhaka)
+        Log.d(TAG, "getGmtDiff: ${timeZone.displayName}")
+        val gmtOffset = timeZone.rawOffset
         Log.d(
             TAG,
             "getGmtDiff:GMT offset is ${
-                TimeUnit.HOURS.convert(mGMTOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
+                TimeUnit.HOURS.convert(gmtOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
             } hours "
         )
-        return TimeUnit.HOURS.convert(mGMTOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
+        return TimeUnit.HOURS.convert(gmtOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
     }
 
 }
