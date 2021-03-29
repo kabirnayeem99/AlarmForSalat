@@ -37,7 +37,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     private val binding get() = _binding!!
     private lateinit var viewModel: AdhanViewModel
-    val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
+    private val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
 
 
     companion object {
@@ -55,21 +55,21 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
 
+        // as it doesn't load with each tab change
+        setUpAlarm()
+
+        return binding.root
+    }
+
+    private fun setUpAlarm() {
         val settingsManager = SettingsManager.instance
 
         if ((activity as AlarmForSalatActivity).placeChanged || (activity as AlarmForSalatActivity).appOnStart) {
             setAlarm(settingsManager, salatTimingsRecyclerViewAdapter)
-            if ((activity as AlarmForSalatActivity).placeChanged) {
-                Toast.makeText(context, "Place has changed", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onViewCreated: Place has changed")
-            } else if ((activity as AlarmForSalatActivity).appOnStart) {
-                Toast.makeText(context, "App has started", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onViewCreated: App has started")
-            }
         }
 
         (activity as AlarmForSalatActivity).appOnStart = false
-        return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
