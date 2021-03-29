@@ -19,8 +19,7 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
     suspend fun getSalatTimingList(): List<SalatTiming> {
 
         val today = SimpleDate(GregorianCalendar())
-        val location = Location(latitude, longitude, Utilities.getGmtDiff(), 0)
-//        val location = Location(30.045411, 31.236735, 2.0, 0)
+        val location = Location(latitude, longitude, Utilities.getGmtDiff(latitude, longitude), 0)
         val azan = Azan(location, Method.MUSLIM_LEAGUE)
         val prayerTimes = azan.getPrayerTimes(today)
 
@@ -31,7 +30,7 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
         val maghrib: Time = prayerTimes.maghrib()
         val isha: Time = prayerTimes.ishaa()
 
-        val adhanList = listOf<SalatTiming>(
+        val adhanList = listOf(
             SalatTiming(
                 1,
                 "Fajr",

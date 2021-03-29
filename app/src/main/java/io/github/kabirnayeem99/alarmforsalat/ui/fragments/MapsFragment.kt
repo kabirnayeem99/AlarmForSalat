@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import io.github.kabirnayeem99.alarmforsalat.R
 import io.github.kabirnayeem99.alarmforsalat.adapters.PlaceAdapter
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentMapsBinding
+import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.utils.App
 import io.github.kabirnayeem99.alarmforsalat.utils.ApplicationPreferencesRepository
 import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
@@ -47,6 +48,11 @@ class MapsFragment : Fragment() {
 
 
     private val binding get() = _binding!!
+
+
+    companion object {
+        val instance: MapsFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { MapsFragment() }
+    }
 
 
     /**
@@ -126,15 +132,12 @@ class MapsFragment : Fragment() {
     }
 
     private fun initPlaceAdapter(): PlaceAdapter {
-
         return PlaceAdapter { city ->
-
             lifecycleScope.launch {
                 settingsManager.setCity(city)
-
             }
+            (activity as AlarmForSalatActivity).placeChanged = true
         }
-
     }
 
     /**

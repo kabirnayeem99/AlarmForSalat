@@ -32,6 +32,9 @@ class AlarmForSalatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAlarmForSalatBinding
     lateinit var viewModel: AdhanViewModel
 
+    var placeChanged: Boolean = false
+    var appOnStart: Boolean = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,12 +97,17 @@ class AlarmForSalatActivity : AppCompatActivity() {
         setAlarmBasedOnViewModel(viewModel)
     }
 
+
+    private fun setUpAalarmBasedOnAzanUtils() {
+
+    }
+
     /**
      * set the alarm based on the data found through view model
      */
-    private fun setAlarmBasedOnViewModel(vm: AdhanViewModel) {
+    private fun setAlarmBasedOnViewModel(adhanViewModel: AdhanViewModel) {
 
-        vm.adhanTime.observe(this, { resources ->
+        adhanViewModel.adhanTime.observe(this, { resources ->
             when (resources) {
                 is Resource.Success -> {
                     with(resources.data?.data?.timings) {

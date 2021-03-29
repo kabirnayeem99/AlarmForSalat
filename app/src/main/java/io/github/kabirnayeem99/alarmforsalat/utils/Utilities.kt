@@ -126,14 +126,11 @@ object Utilities {
 
     }
 
-    fun getGmtDiff(): Double {
-        val cal: Calendar = GregorianCalendar()
-        Log.d(TAG, "getGmtDiff: started")
-//        val timeZone = cal.timeZone
-        val map = TimeZoneMap.forRegion(23.0, 90.0, 24.0, 91.0)
-        val dhaka =
-            map.getOverlappingTimeZone(23.733727342637064, 90.39015353913155)?.zoneId
-        val timeZone = TimeZone.getTimeZone(dhaka)
+    fun getGmtDiff(latitude: Double, longitude: Double): Double {
+        val map =
+            TimeZoneMap.forRegion(latitude - 0.1, longitude - 0.1, latitude + 0.1, longitude + 0.1)
+        val location = map.getOverlappingTimeZone(latitude, longitude)?.zoneId
+        val timeZone = TimeZone.getTimeZone(location)
         Log.d(TAG, "getGmtDiff: ${timeZone.displayName}")
         val gmtOffset = timeZone.rawOffset
         Log.d(

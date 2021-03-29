@@ -37,6 +37,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     private val binding get() = _binding!!
     private lateinit var viewModel: AdhanViewModel
+    val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
 
 
     companion object {
@@ -52,6 +53,22 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
+
+
+        val settingsManager = SettingsManager.instance
+
+        if ((activity as AlarmForSalatActivity).placeChanged || (activity as AlarmForSalatActivity).appOnStart) {
+            setAlarm(settingsManager, salatTimingsRecyclerViewAdapter)
+            if ((activity as AlarmForSalatActivity).placeChanged) {
+                Toast.makeText(context, "Place has changed", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onViewCreated: Place has changed")
+            } else if ((activity as AlarmForSalatActivity).appOnStart) {
+                Toast.makeText(context, "App has started", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onViewCreated: App has started")
+            }
+        }
+
+        (activity as AlarmForSalatActivity).appOnStart = false
         return binding.root
     }
 
@@ -59,17 +76,22 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as AlarmForSalatActivity).viewModel
-        val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
 
-//        createObserver(salatTimingsRecyclerViewAdapter)
 
-        val settingsManager = SettingsManager.instance
+        setUpRecyclerView(salatTimingsRecyclerViewAdapter)
 
+
+    }
+
+    private fun setAlarm(
+        settingsManager: SettingsManager,
+        salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter
+    ) {
+
+        Log.d(TAG, "setAlarm: set alarm was called ")
         with(settingsManager) {
             cityLatFlow.asLiveData().observe(viewLifecycleOwner, { cityLat ->
-
                 cityLongFlow.asLiveData().observe(viewLifecycleOwner, { cityLong ->
-
                     CoroutineScope(Dispatchers.IO).launch {
                         val t = AdhanTimeUtilities(
                             cityLat.toDouble(),
@@ -83,12 +105,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
             })
         }
-
-        setUpRecyclerView(salatTimingsRecyclerViewAdapter)
-
-
     }
-
 
     /**
      * Sets up the recycler view
