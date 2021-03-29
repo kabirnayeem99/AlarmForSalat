@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kabirnayeem99.alarmforsalat.R
@@ -13,7 +14,11 @@ import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAd
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
+import io.github.kabirnayeem99.alarmforsalat.utils.AdhanTimeUtilities
 import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -30,6 +35,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     private val binding get() = _binding!!
     private lateinit var viewModel: AdhanViewModel
     private val salatTimingsRecyclerViewAdapter = SalatTimingsRecyclerViewAdapter()
+    val settingsManager = SettingsManager.instance
 
 
     companion object {
@@ -54,14 +60,36 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     }
 
     private fun setUpAlarm() {
-        val settingsManager = SettingsManager.instance
 
         if ((activity as AlarmForSalatActivity).placeChanged || (activity as AlarmForSalatActivity).appOnStart) {
-            setAlarm(settingsManager, salatTimingsRecyclerViewAdapter)
+            setAlarmDataToDb(settingsManager)
         }
+
+        setAlarm(salatTimingsRecyclerViewAdapter)
 
         (activity as AlarmForSalatActivity).appOnStart = false
 
+    }
+
+    private fun setAlarmDataToDb(settingsManager: SettingsManager) {
+
+        val viewModel = (activity as AlarmForSalatActivity).viewModel
+
+        settingsManager.cityLatFlow.asLiveData().observe(viewLifecycleOwner, Observer { cityLat ->
+            settingsManager.cityLongFlow.asLiveData()
+                .observe(viewLifecycleOwner, { cityLong ->
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val salats = AdhanTimeUtilities(
+                            cityLat.toDouble(),
+                            cityLong.toDouble()
+                        ).getSalatTimingList()
+                        for (salat in salats) {
+                            viewModel.insert(salat)
+                        }
+                    }
+                })
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,7 +104,6 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
     }
 
     private fun setAlarm(
-        settingsManager: SettingsManager,
         salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter
     ) {
 
