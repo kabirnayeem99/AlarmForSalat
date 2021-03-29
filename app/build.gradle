@@ -58,7 +58,7 @@ dependencies {
 
 
     // Lifecycle
-    def lifecycle_version = "2.3.0"
+    def lifecycle_version = "2.3.1"
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
@@ -78,7 +78,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Architectural Components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
     // Room
     implementation "androidx.room:room-runtime:2.2.6"
@@ -87,13 +87,14 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.2.6"
 
+
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
     // Coroutine Lifecycle Scopes
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
