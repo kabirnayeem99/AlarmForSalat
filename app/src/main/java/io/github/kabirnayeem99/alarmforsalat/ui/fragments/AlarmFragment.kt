@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -126,42 +125,42 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
      * and fills the recycler view based on that
      * @param salatTimingsRecyclerViewAdapter [SalatTimingsRecyclerViewAdapter]
      */
-    private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
-
-        viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
-            when (resources) {
-                is Resource.Success -> {
-                    Log.d(TAG, "createObserver: ${resources.data}")
-                    resources.data?.data?.timings?.let {
-                        with(it) {
-                            DataHandler.setTimeInString(
-                                arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
-                            ).also {
-                                salatTimingsRecyclerViewAdapter.differ.submitList(DataHandler.initialiseData())
-                            }
-                        }
-                    }
-                }
-
-                is Resource.Error -> {
-                    Log.d(TAG, "createObserver: ${resources.message}")
-                    resources.message?.let { message ->
-                        Toast.makeText(
-                            context,
-                            message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                else -> {
-                    Log.d(TAG, "createObserver: loading")
-                    Toast.makeText(
-                        context,
-                        "Your Salat times are loading...",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        })
-    }
+//    private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
+//
+//        viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
+//            when (resources) {
+//                is Resource.Success -> {
+//                    Log.d(TAG, "createObserver: ${resources.data}")
+//                    resources.data?.data?.timings?.let {
+//                        with(it) {
+//                            DataHandler.setTimeInString(
+//                                arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
+//                            ).also {
+//                                salatTimingsRecyclerViewAdapter.differ.submitList(DataHandler.initialiseData())
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                is Resource.Error -> {
+//                    Log.d(TAG, "createObserver: ${resources.message}")
+//                    resources.message?.let { message ->
+//                        Toast.makeText(
+//                            context,
+//                            message,
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//                else -> {
+//                    Log.d(TAG, "createObserver: loading")
+//                    Toast.makeText(
+//                        context,
+//                        "Your Salat times are loading...",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        })
+//    }
 }

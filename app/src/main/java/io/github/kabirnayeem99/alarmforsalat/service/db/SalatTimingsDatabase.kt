@@ -4,14 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
-import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTimings
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.utils.Constants
 
 
-@Database(entities = [SalatTimings::class], exportSchema = false, version = 1)
+@Database(entities = [SalatTiming::class], exportSchema = false, version = 1)
 abstract class SalatTimingsDatabase : RoomDatabase() {
-    abstract fun getSalatTimingsDao(): SalatTimingsDao
+    abstract fun getSalatTimingsDao(): SalatTimingDao
 
     companion object {
         @Volatile
