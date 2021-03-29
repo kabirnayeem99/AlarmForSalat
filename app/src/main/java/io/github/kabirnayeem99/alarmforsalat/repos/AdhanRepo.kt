@@ -21,6 +21,8 @@ class AdhanRepo(private var db: SalatTimingsDatabase) {
      */
     suspend fun update(salatTiming: SalatTiming) = db.getSalatTimingsDao().update(salatTiming)
 
+    suspend fun delete(salatTiming: SalatTiming) = db.getSalatTimingsDao().delete(salatTiming)
+
     /**
      * Gets the list of alarms
      */

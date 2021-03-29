@@ -8,8 +8,8 @@ import io.github.kabirnayeem99.alarmforsalat.utils.Constants
 
 @Entity(tableName = Constants.DB_TABLE_NAME_SALAT_TIMINGS)
 data class SalatTiming(
-    @PrimaryKey
-    val id: Int? = null,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
     val name: String,
     @Embedded
     val time: Time,

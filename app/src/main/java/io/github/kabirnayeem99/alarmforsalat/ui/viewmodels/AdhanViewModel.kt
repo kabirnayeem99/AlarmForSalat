@@ -31,7 +31,11 @@ class AdhanViewModel(private val repo: AdhanRepo) : ViewModel() {
     }
 
 
-    fun insert(salatTiming: SalatTiming) = viewModelScope.launch { repo.insert(salatTiming) }
+    fun insert(salatTiming: SalatTiming) = viewModelScope.launch {
+        repo.delete(salatTiming)
+        repo.insert(salatTiming)
+    }
+
     fun update(salatTiming: SalatTiming) = viewModelScope.launch { repo.insert(salatTiming) }
     fun getSalatTimings(): Flow<List<SalatTiming>> = repo.getSalatTimings()
 

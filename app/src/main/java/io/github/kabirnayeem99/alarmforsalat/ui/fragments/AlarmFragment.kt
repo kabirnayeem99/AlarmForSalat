@@ -45,6 +45,13 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         val instance: AlarmFragment by lazy(LazyThreadSafetyMode.PUBLICATION) { AlarmFragment() }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = (activity as AlarmForSalatActivity).viewModel
+        // as it doesn't load with each tab change
+        setUpAlarm(viewModel)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,16 +60,14 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
 
-        // as it doesn't load with each tab change
-        setUpAlarm()
 
         return binding.root
     }
 
-    private fun setUpAlarm() {
+    private fun setUpAlarm(viewModel: AdhanViewModel) {
 
-        if ((activity as AlarmForSalatActivity).placeChanged || (activity as AlarmForSalatActivity).appOnStart) {
-            setAlarmDataToDb(settingsManager)
+        if ((activity as AlarmForSalatActivity).placeChanged) {
+            saveAlarmDataToDb(settingsManager, viewModel)
         }
 
         setAlarm(salatTimingsRecyclerViewAdapter)
@@ -71,14 +76,12 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
     }
 
-    private fun setAlarmDataToDb(settingsManager: SettingsManager) {
+    private fun saveAlarmDataToDb(settingsManager: SettingsManager, viewModel: AdhanViewModel) {
 
-        val viewModel = (activity as AlarmForSalatActivity).viewModel
 
         settingsManager.cityLatFlow.asLiveData().observe(viewLifecycleOwner, Observer { cityLat ->
             settingsManager.cityLongFlow.asLiveData()
                 .observe(viewLifecycleOwner, { cityLong ->
-
                     CoroutineScope(Dispatchers.IO).launch {
                         val salats = AdhanTimeUtilities(
                             cityLat.toDouble(),
@@ -111,31 +114,10 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         viewModel = (activity as AlarmForSalatActivity).viewModel
         viewModel.getSalatTimings().asLiveData()
             .observe(viewLifecycleOwner, { salatTimingList ->
+                Log.d(TAG, "setAlarm: $salatTimingList")
                 salatTimingsRecyclerViewAdapter.differ.submitList(salatTimingList)
 
             })
-//        with(settingsManager) {
-//            cityLatFlow.asLiveData().observe(viewLifecycleOwner, { cityLat ->
-//                cityLongFlow.asLiveData().observe(viewLifecycleOwner, { cityLong ->
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        val salats = AdhanTimeUtilities(
-//                            cityLat.toDouble(),
-//                            cityLong.toDouble()
-//                        ).getSalatTimingList()
-//
-////                        for ((index, salat) in salats.withIndex()) {
-////                            Utilities.setUpAlarm(salat.time, index)
-////                        }
-//
-//                        withContext(Dispatchers.Main) {
-//                            salatTimingsRecyclerViewAdapter.differ.submitList(salats)
-//
-//                        }
-//                    }
-//                })
-//
-//            })
-//        }
     }
 
     /**
@@ -148,44 +130,4 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
             it.layoutManager = LinearLayoutManager(context)
         }
     }
-
-
-//    private fun createObserver(salatTimingsRecyclerViewAdapter: SalatTimingsRecyclerViewAdapter) {
-//
-//        viewModel.adhanTime.observe(viewLifecycleOwner, { resources ->
-//            when (resources) {
-//                is Resource.Success -> {
-//                    Log.d(TAG, "createObserver: ${resources.data}")
-//                    resources.data?.data?.timings?.let {
-//                        with(it) {
-//                            DataHandler.setTimeInString(
-//                                arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
-//                            ).also {
-//                                salatTimingsRecyclerViewAdapter.differ.submitList(DataHandler.initialiseData())
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                is Resource.Error -> {
-//                    Log.d(TAG, "createObserver: ${resources.message}")
-//                    resources.message?.let { message ->
-//                        Toast.makeText(
-//                            context,
-//                            message,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//                else -> {
-//                    Log.d(TAG, "createObserver: loading")
-//                    Toast.makeText(
-//                        context,
-//                        "Your Salat times are loading...",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        })
-//    }
 }
