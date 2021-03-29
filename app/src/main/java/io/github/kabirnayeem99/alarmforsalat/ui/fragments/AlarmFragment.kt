@@ -14,10 +14,7 @@ import io.github.kabirnayeem99.alarmforsalat.adapters.SalatTimingsRecyclerViewAd
 import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
-import io.github.kabirnayeem99.alarmforsalat.utils.AdhanTimeUtilities
-import io.github.kabirnayeem99.alarmforsalat.utils.DataHandler
-import io.github.kabirnayeem99.alarmforsalat.utils.Resource
-import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import io.github.kabirnayeem99.alarmforsalat.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,12 +90,18 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
             cityLatFlow.asLiveData().observe(viewLifecycleOwner, { cityLat ->
                 cityLongFlow.asLiveData().observe(viewLifecycleOwner, { cityLong ->
                     CoroutineScope(Dispatchers.IO).launch {
-                        val t = AdhanTimeUtilities(
+                        val salats = AdhanTimeUtilities(
                             cityLat.toDouble(),
                             cityLong.toDouble()
                         ).getSalatTimingList()
+
+//                        for ((index, salat) in salats.withIndex()) {
+//                            Utilities.setUpAlarm(salat.time, index)
+//                        }
+
                         withContext(Dispatchers.Main) {
-                            salatTimingsRecyclerViewAdapter.differ.submitList(t)
+                            salatTimingsRecyclerViewAdapter.differ.submitList(salats)
+
                         }
                     }
                 })

@@ -21,8 +21,6 @@ import io.github.kabirnayeem99.alarmforsalat.service.db.SalatTimingsDatabase
 import io.github.kabirnayeem99.alarmforsalat.ui.fragments.SettingsFragment
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModelFactory
-import io.github.kabirnayeem99.alarmforsalat.utils.Resource
-import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 import java.util.*
 
 
@@ -94,42 +92,37 @@ class AlarmForSalatActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AdhanViewModel::class.java)
 
-        setAlarmBasedOnViewModel(viewModel)
+//        setAlarmBasedOnViewModel(viewModel)
     }
 
-
-    private fun setUpAalarmBasedOnAzanUtils() {
-
-    }
-
-    /**
-     * set the alarm based on the data found through view model
-     */
-    private fun setAlarmBasedOnViewModel(adhanViewModel: AdhanViewModel) {
-
-        adhanViewModel.adhanTime.observe(this, { resources ->
-            when (resources) {
-                is Resource.Success -> {
-                    with(resources.data?.data?.timings) {
-                        if (this != null) {
-                            val salatArray = arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
-                            for ((index, salatTime) in salatArray.withIndex()) {
-                                val timeNamaz = Utilities.stringToTime(salatTime)
-                                Utilities.setUpAlarm(timeNamaz, index)
-                            }
-                        }
-                    }
-                }
-
-                is Resource.Loading -> {
-                    Toast.makeText(this, "Setting up your alarm", Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    Toast.makeText(this, "Your alarm could not be set", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
+//    /**
+//     * set the alarm based on the data found through view model
+//     */
+//    private fun setAlarmBasedOnViewModel(adhanViewModel: AdhanViewModel) {
+//
+//        adhanViewModel.adhanTime.observe(this, { resources ->
+//            when (resources) {
+//                is Resource.Success -> {
+//                    with(resources.data?.data?.timings) {
+//                        if (this != null) {
+//                            val salatArray = arrayListOf(Fajr, Dhuhr, Asr, Maghrib, Isha)
+//                            for ((index, salatTime) in salatArray.withIndex()) {
+//                                val timeNamaz = Utilities.stringToTime(salatTime)
+//                                Utilities.setUpAlarm(timeNamaz, index)
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                is Resource.Loading -> {
+//                    Toast.makeText(this, "Setting up your alarm", Toast.LENGTH_SHORT).show()
+//                }
+//                else -> {
+//                    Toast.makeText(this, "Your alarm could not be set", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        })
+//    }
 
 
     private fun requestLocationPermission() {

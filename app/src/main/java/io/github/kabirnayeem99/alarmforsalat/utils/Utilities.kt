@@ -7,11 +7,9 @@ import android.util.Log
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.Time
 import io.github.kabirnayeem99.alarmforsalat.enum.Meridiem
 import io.github.kabirnayeem99.alarmforsalat.service.alarm.AlarmService
-import us.dustinj.timezonemap.TimeZoneMap
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 object Utilities {
@@ -31,9 +29,10 @@ object Utilities {
                     set(Calendar.SECOND, 0)
                 }
 
-                alarmService.setExactAlarm(c.timeInMillis, alarmId)
+                alarmService.setRepetitiveAlarm(c.timeInMillis, alarmId)
             }
-            else -> {
+
+            Meridiem.PM -> {
                 val alarmService = AlarmService(App.context)
 
                 val c = Calendar.getInstance().apply {
@@ -42,7 +41,7 @@ object Utilities {
                     set(Calendar.SECOND, 0)
                 }
 
-                alarmService.setExactAlarm(c.timeInMillis, alarmId)
+                alarmService.setRepetitiveAlarm(c.timeInMillis, alarmId)
             }
         }
 
@@ -126,20 +125,6 @@ object Utilities {
 
     }
 
-    fun getGmtDiff(latitude: Double, longitude: Double): Double {
-        val map =
-            TimeZoneMap.forRegion(latitude - 0.1, longitude - 0.1, latitude + 0.1, longitude + 0.1)
-        val location = map.getOverlappingTimeZone(latitude, longitude)?.zoneId
-        val timeZone = TimeZone.getTimeZone(location)
-        Log.d(TAG, "getGmtDiff: ${timeZone.displayName}")
-        val gmtOffset = timeZone.rawOffset
-        Log.d(
-            TAG,
-            "getGmtDiff:GMT offset is ${
-                TimeUnit.HOURS.convert(gmtOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
-            } hours "
-        )
-        return TimeUnit.HOURS.convert(gmtOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
-    }
+
 
 }

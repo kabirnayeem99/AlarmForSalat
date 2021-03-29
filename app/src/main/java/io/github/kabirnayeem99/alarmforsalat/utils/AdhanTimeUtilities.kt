@@ -7,7 +7,9 @@ import com.azan.Time
 import com.azan.astrologicalCalc.Location
 import com.azan.astrologicalCalc.SimpleDate
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
+import us.dustinj.timezonemap.TimeZoneMap
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
 
@@ -19,7 +21,7 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
     suspend fun getSalatTimingList(): List<SalatTiming> {
 
         val today = SimpleDate(GregorianCalendar())
-        val location = Location(latitude, longitude, Utilities.getGmtDiff(latitude, longitude), 0)
+        val location = Location(latitude, longitude, getGmtDiff(latitude, longitude), 0)
         val azan = Azan(location, Method.MUSLIM_LEAGUE)
         val prayerTimes = azan.getPrayerTimes(today)
 
@@ -47,7 +49,7 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
                 3,
                 "Asr",
                 Utilities.azanTimeToMyTime(prayerTimes.assr()),
-                true
+                false
             ),
             SalatTiming(
                 4,
@@ -74,7 +76,6 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
         Log.d(
             TAG, "initialisation of class: \n" +
                     "----------------results------------------------\n" +
-                    "Timezone --> ${TimeZone.getTimeZone("Bangladesh/Dhaka")}\n" +
                     "Fajr --> $fajr\n" +
                     "Dhuhr --> $dhuhr\n" +
                     "Asr --> $asr\n" +
@@ -82,6 +83,21 @@ class AdhanTimeUtilities(var latitude: Double, var longitude: Double) {
                     "Isha --> $isha\n" +
                     "-----------------------------------------------"
         )
+    }
+
+    private fun getGmtDiff(latitude: Double, longitude: Double): Double {
+        val map =
+            TimeZoneMap.forRegion(
+                latitude - 0.01,
+                longitude - 0.01,
+                latitude + 0.01,
+                longitude + 0.01
+            )
+        val location = map.getOverlappingTimeZone(latitude, longitude)?.zoneId
+        val timeZone = TimeZone.getTimeZone(location)
+        Log.d(TAG, "getGmtDiff: ${timeZone.displayName}")
+        val gmtOffset = timeZone.rawOffset
+        return TimeUnit.HOURS.convert(gmtOffset.toLong(), TimeUnit.MILLISECONDS).toDouble()
     }
 
 }

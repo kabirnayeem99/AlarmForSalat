@@ -7,4 +7,5 @@ class AdhanRepo(private var db: SalatTimingsDatabase) {
 
     suspend fun getAdhanTime(city: String, country: String) =
         RetrofitInstance.api.getAdhanTime(city, country)
+
 }
