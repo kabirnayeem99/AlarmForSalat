@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.AladhanApiResponse
+import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
 import io.github.kabirnayeem99.alarmforsalat.repos.AdhanRepo
 import io.github.kabirnayeem99.alarmforsalat.utils.Resource
 import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -28,6 +30,10 @@ class AdhanViewModel(private val repo: AdhanRepo) : ViewModel() {
         getAdhanTime()
     }
 
+
+    fun insert(salatTiming: SalatTiming) = viewModelScope.launch { repo.insert(salatTiming) }
+    fun update(salatTiming: SalatTiming) = viewModelScope.launch { repo.insert(salatTiming) }
+    fun getSalatTimings(): Flow<List<SalatTiming>> = repo.getSalatTimings()
 
     private fun getAdhanTime() = viewModelScope.launch {
         adhanTime.postValue(Resource.Loading())

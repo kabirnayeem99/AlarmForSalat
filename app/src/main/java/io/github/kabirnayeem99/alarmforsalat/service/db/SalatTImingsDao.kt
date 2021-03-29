@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import io.github.kabirnayeem99.alarmforsalat.data.view_objects.SalatTiming
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SalatTimingDao {
@@ -15,5 +16,5 @@ interface SalatTimingDao {
     suspend fun update(salatTiming: SalatTiming)
 
     @Query("SELECT * FROM salat_timings_table")
-    suspend fun getSalatTimings(): List<SalatTiming>
+    fun getSalatTimings(): Flow<List<SalatTiming>>
 }
