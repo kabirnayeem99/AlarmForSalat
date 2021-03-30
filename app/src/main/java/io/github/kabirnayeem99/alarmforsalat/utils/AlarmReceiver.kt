@@ -23,7 +23,15 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     /**
-     * Triggers once the event happens
+     * This method is called when the BroadcastReceiver is receiving an Intent
+     * broadcast.  During this time one can use the other methods on
+     * BroadcastReceiver to view/modify the current result values.
+     *
+     * This onReceive() is used to show notification on intent receive
+     * and in case of repetitive alarm, setting the alarm for next salat.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
      */
     override fun onReceive(context: Context, intent: Intent) {
 
@@ -54,18 +62,23 @@ class AlarmReceiver : BroadcastReceiver() {
 
 
     /**
-     * sets repetitive alarm by 1 day
+     * Schedules repeating alarms on daily basis
+     * Repeating basis - 1 Day
+     * @param alarmService [AlarmService]
      */
     private fun setRepetitiveAlarm(alarmService: AlarmService) {
         val cal = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis + TimeUnit.DAYS.toMillis(1)
-            Log.d(TAG, "Set alarm for next week same time - ${convertDate(this.timeInMillis)}")
+            Log.d(TAG, "Set alarm for next day same time - ${convertDate(this.timeInMillis)}")
         }
         alarmService.setRepetitiveAlarm(cal.timeInMillis, 0)
     }
 
     /**
-     * Creates notification to show on even receive
+     * Creates notification to show on event receive
+     * @param context [Context]
+     * @param title [String]
+     * @param salatName [String]
      */
     private fun buildNotifications(context: Context, title: String, salatName: String) {
         Notify.with(context).content {
@@ -76,7 +89,8 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     /**
-     * Converts the milli second time into string
+     * Converts the milli second time into formatted string date
+     * @param timeMillis [Long]
      */
     private fun convertDate(timeMillis: Long): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
