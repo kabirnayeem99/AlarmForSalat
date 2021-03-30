@@ -1,6 +1,7 @@
 package io.github.kabirnayeem99.alarmforsalat.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,13 @@ import io.github.kabirnayeem99.alarmforsalat.databinding.FragmentAlarmBinding
 import io.github.kabirnayeem99.alarmforsalat.ui.activities.AlarmForSalatActivity
 import io.github.kabirnayeem99.alarmforsalat.ui.viewmodels.AdhanViewModel
 import io.github.kabirnayeem99.alarmforsalat.utils.AdhanTimeUtilities
+import io.github.kabirnayeem99.alarmforsalat.utils.Constants
 import io.github.kabirnayeem99.alarmforsalat.utils.SettingsManager
+import io.github.kabirnayeem99.alarmforsalat.utils.Utilities
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 /**
@@ -72,6 +76,7 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
 
         setAlarmToRecyclerView(salatTimingsRecyclerViewAdapter)
 
+
         (activity as AlarmForSalatActivity).appOnStart = false
 
     }
@@ -109,7 +114,36 @@ class AlarmFragment : Fragment(R.layout.fragment_alarm) {
         viewModel = (activity as AlarmForSalatActivity).viewModel
         viewModel.getSalatTimings().asLiveData()
             .observe(viewLifecycleOwner, { salatTimingList ->
+
+                // submits salat timing list to the recycler view
                 adapter.differ.submitList(salatTimingList)
+
+
+                // sets alarm based on the list
+                for (salat in salatTimingList) {
+                    salat.id?.let { it ->
+                        val id = it.toInt()
+                        Log.d(
+                            TAG,
+                            "setAlarmToRecyclerView: setting alarm for ${Constants.SALATS[id]}"
+                        )
+                        val cal = Calendar.getInstance()
+                        val cal2 = Calendar.getInstance().also {
+                            it.set(Calendar.HOUR, salat.time.hour.toInt())
+                        }
+
+                        Log.d(
+                            TAG, "setAlarmToRecyclerView: set alarm ${cal.get(Calendar.HOUR)}" +
+                                    ": ${cal.get(Calendar.MINUTE)} \n" +
+                                    "current time ${cal2.get(Calendar.HOUR)}" +
+                                    ": ${cal2.get(Calendar.MINUTE)}"
+                        )
+                        if (cal2.timeInMillis > cal.timeInMillis) {
+                            Utilities.setUpAlarm(salat.time, id)
+                        }
+                    }
+
+                }
 
             })
     }

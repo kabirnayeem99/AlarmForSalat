@@ -37,7 +37,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // gets the time through intent extras
         val timeInMillis: Long = intent.getLongExtra(Constants.EXTRA_EXACT_ALARM, 0)
-        val salatName: String = intent.getStringExtra(Constants.EXTRA_SALAT_NAME)!!
+        val salatName: String? = intent.getStringExtra(Constants.EXTRA_SALAT_NAME)
 
         // sets event based on the action
         when (intent.action) {
@@ -45,27 +45,34 @@ class AlarmReceiver : BroadcastReceiver() {
                 val cal = Calendar.getInstance()
 
                 // avoids showing notification for previous alarms
-                if (cal.timeInMillis > timeInMillis) {
-                    buildNotifications(context, salatName, convertDate(timeInMillis))
-                }
             }
             Constants.ACTION_SET_REPETITIVE_EXACT -> {
                 val cal = Calendar.getInstance()
-                setRepetitiveAlarm(AlarmService(context))
-                if (cal.timeInMillis > timeInMillis) {
-                    buildNotifications(
-                        context,
-                        salatName,
-                        convertDate(timeInMillis)
+                if (cal.timeInMillis >= timeInMillis) {
+                    if (salatName != null) {
+                        buildNotifications(context, salatName, convertDate(timeInMillis))
+                    }
+                }
+                if (cal.timeInMillis >= timeInMillis) {
+                    setRepetitiveAlarm(AlarmService(context), timeInMillis)
+                    Log.d(
+                        TAG,
+                        "onReceive: current time is ${convertDate(cal.timeInMillis)} alarm time is " +
+                                convertDate(timeInMillis)
                     )
+                    if (salatName != null) {
+                        buildNotifications(
+                            context,
+                            salatName,
+                            convertDate(timeInMillis)
+                        )
+                    }
                 }
             }
             else -> {
                 println("Nothing happened")
             }
         }
-
-
     }
 
 
@@ -74,12 +81,10 @@ class AlarmReceiver : BroadcastReceiver() {
      * Repeating basis - 1 Day
      * @param alarmService [AlarmService]
      */
-    private fun setRepetitiveAlarm(alarmService: AlarmService) {
-        val cal = Calendar.getInstance().apply {
-            this.timeInMillis = timeInMillis + TimeUnit.DAYS.toMillis(1)
-            Log.d(TAG, "Set alarm for next day same time - ${convertDate(this.timeInMillis)}")
-        }
-        alarmService.setRepetitiveAlarm(cal.timeInMillis, 0)
+    private fun setRepetitiveAlarm(alarmService: AlarmService, timeMillis: Long) {
+        val timeInMillis = timeMillis + TimeUnit.DAYS.toMillis(1)
+        Log.d(TAG, "Set alarm for next day same time - ${convertDate(timeInMillis)}")
+        alarmService.setRepetitiveAlarm(timeInMillis, 0)
     }
 
     /**
