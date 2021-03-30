@@ -16,17 +16,20 @@ class AlarmService(private val context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+    /**
+     * Cancels the Alarm
+     * @param alarmId [Int], the id of the Salat, such as 1 for Fajr
+     */
     fun cancelAlarm(alarmId: Int) {
-        alarmManager.cancel(
-            getPendingIntent(
-                getIntent(
-
-                ), alarmId
-            )
-        )
+        alarmManager.cancel(getPendingIntent(getIntent(), alarmId))
     }
 
 
+    /**
+     * Schedules exact alarm or alarm for only once
+     * @param timeInMillis [Long]
+     * @param alarmId [Int], the id of the salat, such as 1 for Fajr
+     */
     fun setExactAlarm(timeInMillis: Long, alarmId: Int) {
 
         Log.d(TAG, "setExactAlarm: setting up alarm for $timeInMillis")
@@ -36,13 +39,17 @@ class AlarmService(private val context: Context) {
                 getIntent().apply {
                     action = Constants.SET_EXACT_ALARM
                     putExtra(Constants.EXTRA_EXACT_ALARM, timeInMillis)
-                    Log.d(TAG, "setExactAlarm: setting up $action for $timeInMillis")
                 }, alarmId
             )
         )
     }
 
-    //1 day
+    /**
+     * Schedules repeating alarms on daily basis
+     * Repeating basis - 1 Day
+     * @param timeInMillis [Long]
+     * @param alarmId [Int], the id of Salat, such as 1 for Fajr
+     */
     fun setRepetitiveAlarm(timeInMillis: Long, alarmId: Int) {
         setAlarm(
             timeInMillis,
