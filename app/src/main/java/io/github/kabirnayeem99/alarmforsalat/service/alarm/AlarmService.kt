@@ -32,7 +32,6 @@ class AlarmService(private val context: Context) {
      */
     fun setExactAlarm(timeInMillis: Long, alarmId: Int) {
 
-        Log.d(TAG, "setExactAlarm: setting up alarm for $timeInMillis")
         setAlarm(
             timeInMillis,
             getPendingIntent(
@@ -51,12 +50,17 @@ class AlarmService(private val context: Context) {
      * @param alarmId [Int], the id of Salat, such as 1 for Fajr
      */
     fun setRepetitiveAlarm(timeInMillis: Long, alarmId: Int) {
+        Log.d(
+            TAG,
+            "setRepetitiveAlarm: Setting repetitive alarm for ${Constants.salatHashMap[alarmId]}"
+        )
         setAlarm(
             timeInMillis,
             getPendingIntent(
                 getIntent().apply {
                     action = Constants.ACTION_SET_REPETITIVE_EXACT
                     putExtra(Constants.EXTRA_EXACT_ALARM, timeInMillis)
+                    putExtra(Constants.EXTRA_SALAT_NAME, Constants.salatHashMap[alarmId])
                 }, alarmId
             )
         )

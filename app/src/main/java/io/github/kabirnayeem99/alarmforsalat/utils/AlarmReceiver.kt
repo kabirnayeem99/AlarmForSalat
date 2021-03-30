@@ -29,11 +29,12 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // gets the time through intent extras
         val timeInMillis: Long = intent.getLongExtra(Constants.EXTRA_EXACT_ALARM, 0)
+        val salatName: String = intent.getStringExtra(Constants.EXTRA_SALAT_NAME)!!
 
         // sets event based on the action
         when (intent.action) {
             Constants.SET_EXACT_ALARM -> {
-                buildNotifications(context, "Salat time", convertDate(timeInMillis))
+                buildNotifications(context, salatName, convertDate(timeInMillis))
             }
             Constants.ACTION_SET_REPETITIVE_EXACT -> {
                 setRepetitiveAlarm(AlarmService(context))
