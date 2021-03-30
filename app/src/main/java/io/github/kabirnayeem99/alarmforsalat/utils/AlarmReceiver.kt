@@ -42,15 +42,23 @@ class AlarmReceiver : BroadcastReceiver() {
         // sets event based on the action
         when (intent.action) {
             Constants.SET_EXACT_ALARM -> {
-                buildNotifications(context, salatName, convertDate(timeInMillis))
+                val cal = Calendar.getInstance()
+
+                // avoids showing notification for previous alarms
+                if (cal.timeInMillis > timeInMillis) {
+                    buildNotifications(context, salatName, convertDate(timeInMillis))
+                }
             }
             Constants.ACTION_SET_REPETITIVE_EXACT -> {
+                val cal = Calendar.getInstance()
                 setRepetitiveAlarm(AlarmService(context))
-                buildNotifications(
-                    context,
-                    "Set Repetitive Exact Time",
-                    convertDate(timeInMillis)
-                )
+                if (cal.timeInMillis > timeInMillis) {
+                    buildNotifications(
+                        context,
+                        salatName,
+                        convertDate(timeInMillis)
+                    )
+                }
             }
             else -> {
                 println("Nothing happened")

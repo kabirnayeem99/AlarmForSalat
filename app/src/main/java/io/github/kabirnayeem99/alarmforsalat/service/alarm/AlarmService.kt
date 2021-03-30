@@ -52,7 +52,7 @@ class AlarmService(private val context: Context) {
     fun setRepetitiveAlarm(timeInMillis: Long, alarmId: Int) {
         Log.d(
             TAG,
-            "setRepetitiveAlarm: Setting repetitive alarm for ${Constants.salatHashMap[alarmId]}"
+            "setRepetitiveAlarm: Setting repetitive alarm for ${Constants.SALATS[alarmId]}"
         )
         setAlarm(
             timeInMillis,
@@ -60,16 +60,23 @@ class AlarmService(private val context: Context) {
                 getIntent().apply {
                     action = Constants.ACTION_SET_REPETITIVE_EXACT
                     putExtra(Constants.EXTRA_EXACT_ALARM, timeInMillis)
-                    putExtra(Constants.EXTRA_SALAT_NAME, Constants.salatHashMap[alarmId])
+                    putExtra(Constants.EXTRA_SALAT_NAME, Constants.SALATS[alarmId])
                 }, alarmId
             )
         )
     }
 
+    /**
+     * Sets the alarm
+     * @param timeInMillis [Long]
+     * @param pendingIntent [PendingIntent]
+     */
     private fun setAlarm(
         timeInMillis: Long,
         pendingIntent: PendingIntent,
     ) {
+        // this alarm will be allowed to execute
+        // even when the system is in low-power idle modes.
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 
